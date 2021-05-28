@@ -45,7 +45,7 @@ class RoomDetail extends StatelessWidget {
 
                   for (var message in messages) {
                     final humidity1 = message.data['humidity'];
-                    // final id1= message.data['id'];
+                    final id1= message.data['id'];
                     final temp1 = message.data['temp'];
 
                     SensorData s1 = SensorData("Humidity", humidity1);
@@ -53,12 +53,15 @@ class RoomDetail extends StatelessWidget {
                     SensorData s3 = SensorData("Oxygen", temp1);
 
 
+
                     dataa.clear();
                     dataa2.clear();
 
+                    if(id1.toString()== roomid){
+
                     dataa.add(s1);
                     // dataa.add(s2);
-                    dataa.add(s3);
+                    dataa.add(s3);}
 
 
                   }
