@@ -17,7 +17,7 @@ class RoomTile extends StatelessWidget {
       child: GridTile(
         child: GestureDetector(
           onTap: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>RoomDetail(roomName)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>RoomDetail(roomName,id)));
            // Navigator.pushNamed(context, RoomDetail.id,
               //arguments: {
               // 'roomName' : roomName,

@@ -15,8 +15,9 @@ class RoomDetail extends StatelessWidget {
 
   static String id='room_detail';
   final String roomName;
+  final String roomid;
 
-  RoomDetail(this.roomName);
+  RoomDetail(this.roomName,this.roomid);
 
   final _firestore = Firestore.instance;
 
