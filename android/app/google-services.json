@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "144890986066",
+    "project_id": "safe-home-4dcc1",
+    "storage_bucket": "safe-home-4dcc1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:144890986066:android:1cbf81c64cf68736c1a98b",
+        "android_client_info": {
+          "package_name": "com.moazbinyounud.safe_home"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "144890986066-85u0ar4830bsu5t2audsctb401vj4d9p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAH6zAFR33tOGN-lweiS8NLczoL-qe3lOc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "144890986066-85u0ar4830bsu5t2audsctb401vj4d9p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
