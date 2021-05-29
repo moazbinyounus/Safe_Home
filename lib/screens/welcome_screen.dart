@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:io';
 import 'login_screen.dart';
 import 'registration_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:safe_home/push_nofitications.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static String id  = 'welcome_screen';
@@ -10,8 +13,23 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  final Firestore _db= Firestore.instance;
+  final FirebaseMessaging _firebasemessaging = FirebaseMessaging();
+
+  PushNotificationsManager p= PushNotificationsManager();
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
+    // _firebasemessaging.setAutoInitEnabled(true);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
