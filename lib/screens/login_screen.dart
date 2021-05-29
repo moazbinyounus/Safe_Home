@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:safe_home/screens/rooms_screen.dart';
@@ -130,12 +131,17 @@ class _LoginScreenState extends State<LoginScreen> {
                        if (newUser != null){
                           Navigator.pushNamed(context, RoomScreen.id);
                        }
+
+
                        setState(() {
                          spinner= false;
                        });
                       }
                       catch (e){
                         print(e);
+                        CupertinoAlertDialog(
+                          title: Text('something went wrong'),
+                        );
                       }
                     },
                     minWidth: 200.0,
