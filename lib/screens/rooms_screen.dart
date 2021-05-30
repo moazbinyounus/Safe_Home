@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/room_tile.dart';
+import 'addroom_screen.dart';
 
 FirebaseUser currentUser;
 Firestore _firestore= Firestore.instance;
@@ -39,21 +40,30 @@ void initState() {
     return
        Scaffold(
         appBar: AppBar(
+          //foregroundColor: Colors.blueAccent,
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.deepPurple,
           shadowColor: Colors.white,
 
-          title: Center(
-            child: Text('Room Management',
-            style: TextStyle(
-              color: Colors.deepPurple
-            ),),
-          ),
+          title: Text('Room Management',
+          style: TextStyle(
+            color: Colors.white
+          ),),
         ),
-        body: Column(
-          children: [
-            RoomStream(),
-          ],
+        body: SafeArea(
+          child: Column(
+            children: [
+              RoomStream(),
+              FloatingActionButton(onPressed: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>AddRoom(currentUser.email)));
+              },
+                backgroundColor: Colors.deepPurple,
+              child: Icon(Icons.add
+
+              ),
+              )
+            ],
+          ),
         ),
       );
   }
@@ -124,7 +134,7 @@ class RoomStream extends StatelessWidget {
               itemCount: messageList.length,
               itemBuilder: (ctx,i)=>RoomTile(messageList[i].id,messageList[i].roomName,messageList[i].owner),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 3/2,crossAxisSpacing: 10,mainAxisSpacing: 10,
+                crossAxisCount: 2, childAspectRatio: 3/3,crossAxisSpacing: 10,mainAxisSpacing: 10,
 
               ),
             ),

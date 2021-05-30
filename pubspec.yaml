@@ -49,6 +49,7 @@ dependencies:
 
 
 
+
 dev_dependencies:
 
   flutter_test:
@@ -95,3 +96,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: NunitoSans
+      fonts:
+        - asset: assets/fonts/NunitoSans-ExtraLight.ttf

@@ -149,7 +149,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       'Log In',
                       style: TextStyle(
-                        color: Colors.white
+                        color: Colors.white,
+                        fontFamily: 'NunitoSans',
+                        fontWeight: FontWeight.bold,
 
                       ),
                     ),

@@ -13,8 +13,9 @@ final _firestore = Firestore.instance;
 
 
 class Temp extends StatelessWidget {
-  const Temp({Key key}) : super(key: key);
-  static  String id='temp_screen';
+  //const Temp({Key key}) : super(key: key);
+  final  String id;
+  Temp(this.id);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +33,7 @@ class Temp extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
+
                       child: CircularProgressIndicator(),
                     );
                   }
@@ -39,28 +41,45 @@ class Temp extends StatelessWidget {
                   final messages = snapshot.data.documents.reversed;
 
                   List<Text> sensordata = [];
+                  dataa.clear();
+                  dataa2.clear();
 
                   for (var message in messages) {
 
+
+
                     String temp = message.data['temp'];
                     String time = message.data['time'];
+                    int userId=message.data['id'];
+                    String useridstring=userId.toString();
 
                     double timeInMin = double.parse(time);
 
                     double tempInDouble =  double.parse(temp);
-
+                    if(useridstring==id) {
                     SensorData s = SensorData(tempInDouble , timeInMin);
 
                     // dataa.clear();
                     // dataa2.clear();
+                    print(id);
+                    print(userId.toString());
 
-                    dataa.add(s);
-
+                      print('in loop temp');
+                      print(id);
+                      print(userId.toString());
+                      dataa.add(s);
+                    }
 
                   }
                   return
 
                      SfCartesianChart(
+                       //backgroundColor: Colors.deepPurple,
+                       //borderColor: Colors.deepOrange,
+                       //plotAreaBackgroundColor: Colors.deepOrange,
+                       //plotAreaBorderColor: Colors.deepOrange,
+
+
 
 
 
@@ -86,7 +105,7 @@ class Temp extends StatelessWidget {
 
                 }),
 
-            SizedBox(height: 20,
+           SizedBox(height: 20,
             ),
 
 
@@ -124,6 +143,19 @@ class Temp extends StatelessWidget {
     double time;
     double value;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     SensorData(this.time, this.value);
     }
 
@@ -135,8 +167,8 @@ class Temp extends StatelessWidget {
     for (int i = 0; i < dataa.length; i++) {
     double x = dataa[i].time;
     double y = dataa[i].value;
-    print(x);
-    print(y);
+    //print(x);
+    //print(y);
     SensorData s = SensorData(x, y);
     dataa2.add(s);
     }

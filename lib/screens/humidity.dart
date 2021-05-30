@@ -8,8 +8,9 @@ import 'package:firebase_core/firebase_core.dart';
 final _firestore = Firestore.instance;
 
 class Humidity extends StatelessWidget {
-  const Humidity({Key key}) : super(key: key);
-  static String id = 'humidity_screen';
+  //const Humidity({Key key}) : super(key: key);
+  final String id ;
+  Humidity(this.id);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +21,7 @@ class Humidity extends StatelessWidget {
         child: Column(
           children: <Widget>[
             StreamBuilder<QuerySnapshot>(
-                stream: _firestore.collection('finaltemp').snapshots(),
+                stream: _firestore.collection('finalhmd').snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     // snapshot.data.documents.forEach((element) { })
@@ -32,21 +33,27 @@ class Humidity extends StatelessWidget {
                   final messages = snapshot.data.documents.reversed;
 
                   List<Text> sensordata = [];
+                  dataa.clear();
+                  dataa2.clear();
 
                   for (var message in messages) {
-                    String temp = message.data['temp'];
+                    String temp = message.data['humidity'];
                     String time = message.data['time'];
+                    int userId=message.data['id'];
+                    String useridstring=userId.toString();
+
 
                     double timeInMin = double.parse(time);
 
                     double tempInDouble = double.parse(temp);
+    if(useridstring==id) {
 
                     SensorData s = SensorData(tempInDouble, timeInMin);
 
                     // dataa.clear();
                     // dataa2.clear();
 
-                    dataa.add(s);
+                    dataa.add(s);}
                   }
                   return SfCartesianChart(
                       zoomPanBehavior: ZoomPanBehavior(

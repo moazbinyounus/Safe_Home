@@ -47,6 +47,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Text(
                   'Safe Home',
                   style: TextStyle(
+                    fontFamily: 'NunitoSans',
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
                   ),

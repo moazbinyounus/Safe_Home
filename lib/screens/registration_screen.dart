@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:safe_home/screens/rooms_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -18,6 +17,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth= FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: ModalProgressHUD(

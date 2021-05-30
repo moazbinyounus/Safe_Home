@@ -52,8 +52,8 @@ class _MyAppState extends State<MyApp> {
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
         RoomScreen.id: (context) => RoomScreen(),
-        Temp.id: (context) => Temp(),
-        Humidity.id: (context) => Humidity(),
+        //Temp.id: (context) => Temp(),
+        //Humidity.id: (context) => Humidity(),
 
         //RoomDetail.id : (context) => RoomDetail(),
       },

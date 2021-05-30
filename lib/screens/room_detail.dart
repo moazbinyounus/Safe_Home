@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart'
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:safe_home/screens/humidity.dart';
+import 'package:safe_home/screens/pirSensor.dart';
 import '../models/room_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -15,9 +16,10 @@ import 'package:cloud_firestore/cloud_firestore.dart'
 
 class RoomDetail extends StatelessWidget {
   static String id = 'room_detail';
+  final String roomId;
   final String roomName;
 
-  RoomDetail(this.roomName);
+  RoomDetail(this.roomName,this.roomId);
 
   final _firestore = Firestore.instance;
 
@@ -51,14 +53,23 @@ class RoomDetail extends StatelessWidget {
               ),
             ),
             ListTile(
-              title: Text('Item 1'),
+              title: Text('Emergency Contacts'),
               onTap: () {
                 // Update the state of the app.
                 // ...
               },
             ),
             ListTile(
-              title: Text('Item 2'),
+              title: Text('Activate Motion Detection'),
+              onTap: () {
+                // Update the state of the app.
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>PirSensor(roomId)));
+
+                // ...
+              },
+            ),
+            ListTile(
+              title: Text('Sign out'),
               onTap: () {
                 // Update the state of the app.
                 // ...
@@ -69,38 +80,44 @@ class RoomDetail extends StatelessWidget {
       ),
         body: Column(
       children: <Widget>[
-        Expanded(
-          flex: 4,
-          child: StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('test1').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+        StreamBuilder<QuerySnapshot>(
+            stream: _firestore.collection('test1').snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-                final messages = snapshot.data.documents.reversed;
+              final messages = snapshot.data.documents;
 
-                List<Text> sensordata = [];
+              List<Text> sensordata = [];
 
-                for (var message in messages) {
-                  final humidity1 = message.data['humidity'];
-                  // final id1= message.data['id'];
-                  final temp1 = message.data['temp'];
+              for (var message in messages) {
+                final humidity1 = message.data['humidity'];
+                final id1= message.data['id'];
+                final temp1 = message.data['temp'];
 
-                  SensorData s1 = SensorData("Humidity", humidity1);
-                  // SensorData s2 = SensorData("id", id1);
-                  SensorData s3 = SensorData("Temperature", temp1);
+                SensorData s1 = SensorData("Humidity", humidity1);
+                // SensorData s2 = SensorData("id", id1);
+                SensorData s3 = SensorData("Temperature", temp1);
 
-                  dataa.clear();
-                  dataa2.clear();
+                dataa.clear();
+                dataa2.clear();
+                print(roomId);
 
-                  dataa.add(s1);
-                  // dataa.add(s2);
-                  dataa.add(s3);
-                }
-                return SfCircularChart(
+
+                if(id1.toString() == roomId){
+                  print(roomId);
+                  print(id1.toString());
+                  print('in loop');
+
+                dataa.add(s1);
+                //dataa.add(s2);
+                dataa.add(s3);}
+              }
+              return Expanded(
+                child: SfCircularChart(
                   legend: Legend(
                       overflowMode: LegendItemOverflowMode.wrap,
                       isVisible: true,
@@ -112,18 +129,20 @@ class RoomDetail extends StatelessWidget {
                         yValueMapper: (SensorData sd, _) => sd.value,
                         dataLabelSettings: DataLabelSettings(isVisible: true)),
                   ],
-                );
-              }),
-        ),
+                ),
+              );
+            }),
         Row(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(20),
               child: Expanded(
                 child: OutlinedButton(
                     child: Text("Temperature"),
                     onPressed: () {
-                      Navigator.pushNamed(context, Temp.id);
+                      //Navigator.pushNamed(context, roomId);
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Temp(roomId)));
+
                     }),
                 flex: 1,
               ),
@@ -134,7 +153,8 @@ class RoomDetail extends StatelessWidget {
                 child: OutlinedButton(
                     child: Text("Humidity"),
                     onPressed: () {
-                      Navigator.pushNamed(context, Humidity.id);
+                      //Navigator.pushNamed(context, Humidity.id);
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Humidity(roomId)));
                     }),
                 flex: 1,
               ),
@@ -163,8 +183,8 @@ List<SensorData> getSensorData() {
     if (i < 3) {
       String x = dataa[i].sensorName;
       int y = dataa[i].value;
-      print(x);
-      print(y);
+      //print(x);
+      //print(y);
       SensorData s = SensorData(x, y);
       dataa2.add(s);
     }
