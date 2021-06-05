@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'
+
     show Firestore, QuerySnapshot;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:safe_home/screens/humidity.dart';
 import 'package:safe_home/screens/pirSensor.dart';
+import 'package:safe_home/screens/welcome_screen.dart';
 import '../models/room_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -13,6 +15,8 @@ import 'package:safe_home/screens/temperature_chart.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'
     show Firestore, QuerySnapshot;
+import 'package:firebase_auth/firebase_auth.dart';
+final _auth = FirebaseAuth.instance;
 
 class RoomDetail extends StatelessWidget {
   static String id = 'room_detail';
@@ -65,6 +69,7 @@ class RoomDetail extends StatelessWidget {
                 // Update the state of the app.
                 Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>PirSensor(roomId)));
 
+
                 // ...
               },
             ),
@@ -73,6 +78,14 @@ class RoomDetail extends StatelessWidget {
               onTap: () {
                 // Update the state of the app.
                 // ...
+                _auth.signOut();
+                //Navigator.of(context)push();
+                //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>WelcomeScreen.id));
+                Navigator.pushNamed(context, WelcomeScreen.id);
+
+
+
+
               },
             ),
           ],
