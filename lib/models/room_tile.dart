@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:safe_home/screens/room_detail.dart';
-
+import '../models/dialod_del.dart';
 
 class RoomTile extends StatelessWidget {
+
   static String line='room_tile';
   final String id;
   final String roomName;
@@ -18,15 +19,16 @@ class RoomTile extends StatelessWidget {
         child: GestureDetector(
           onTap: (){
             Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>RoomDetail(roomName,id)));
-           // Navigator.pushNamed(context, RoomDetail.id,
-              //arguments: {
-              // 'roomName' : roomName,
-             // }
-
-           // );
-
 
           },
+          onLongPress: (){
+            print("00");
+            showDialog(
+              context: context,
+              builder: (_) => LogoutOverlay(id),
+            );
+          },
+
           child: Container(
             color: Colors.deepPurple,
             child: Center(

@@ -1,28 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:safe_home/models/room_tile.dart';
-import 'package:safe_home/screens/humidity.dart';
 import 'package:safe_home/screens/login_screen.dart';
 import 'package:safe_home/screens/registration_screen.dart';
-import 'package:safe_home/screens/room_detail.dart';
 import 'package:safe_home/screens/rooms_screen.dart';
 import 'package:safe_home/screens/welcome_screen.dart';
-import 'package:safe_home/screens/temperature_chart.dart';
-import 'package:safe_home/screens/humidity.dart';
-import 'push_nofitications.dart';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
-
-final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+import 'package:firebase_core/firebase_core.dart';
 
 void main() {
   runApp(MyApp());
-
 }
-
-
-
 
 class MyApp extends StatefulWidget {
   const MyApp({Key key}) : super(key: key);
@@ -33,12 +18,21 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-
-
-
-
-
-
+  //function to initialize flutter
+  void initializeFlutterFire() async {
+    try {
+      await Firebase.initializeApp();
+    } catch(e) {
+      print('error connecting to firebase');
+    }
+  }
+  @override
+  // init is called for running firebase initialization function first.
+  void initState() {
+    // calling firebase initializing function
+    initializeFlutterFire();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

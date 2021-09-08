@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 
-final _firestore = Firestore.instance;
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
 
@@ -38,7 +38,7 @@ class Temp extends StatelessWidget {
                     );
                   }
 
-                  final messages = snapshot.data.documents.reversed;
+                  final messages = snapshot.data.docs.reversed;
 
                   List<Text> sensordata = [];
                   dataa.clear();
@@ -48,9 +48,9 @@ class Temp extends StatelessWidget {
 
 
 
-                    String temp = message.data['temp'];
-                    String time = message.data['time'];
-                    int userId=message.data['id'];
+                    String temp = message.get('temp');
+                    String time = message.get('time');
+                    int userId=message.get('id');
                     String useridstring=userId.toString();
 
                     double timeInMin = double.parse(time);

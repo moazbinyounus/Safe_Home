@@ -1,9 +1,11 @@
+//this file contains the ui of welcome screen as well as navigation to login and registration page. this page uses custom font and 2 buttons.
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'login_screen.dart';
 import 'registration_screen.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:safe_home/push_nofitications.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -13,10 +15,10 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  final Firestore _db= Firestore.instance;
-  final FirebaseMessaging _firebasemessaging = FirebaseMessaging();
-
-  PushNotificationsManager p= PushNotificationsManager();
+  // final Firestore _db= Firestore.instance;
+  // final FirebaseMessaging _firebasemessaging = FirebaseMessaging();
+  //
+  // PushNotificationsManager p= PushNotificationsManager();
 @override
   void initState() {
     // TODO: implement initState
@@ -41,12 +43,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Row(
               children: <Widget>[
                 Container(
+                  //will contain the logo of the app
                   child: Image.asset('images/logo.png'),
                   height: 60.0,
                 ),
                 Text(
                   'Safe Home',
                   style: TextStyle(
+                    // font for the app name
                     fontFamily: 'NunitoSans',
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
@@ -54,6 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
               ],
             ),
+            //to give sepration between app name and buttons
             SizedBox(
               height: 48.0,
             ),
@@ -65,6 +70,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 borderRadius: BorderRadius.circular(30.0),
                 child: MaterialButton(
                   onPressed: () {
+                    //navigation to login screen this is done used named routes
                     Navigator.pushNamed(context, LoginScreen.id);
 
                     //Go to login screen.
@@ -88,7 +94,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 elevation: 5.0,
                 child: MaterialButton(
                   onPressed: () {
-                    //Go to registration screen.
+                    //Go to registration screen using names routes
                     Navigator.pushNamed(context, RegistrationScreen.id);
                   },
                   minWidth: 200.0,

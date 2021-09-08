@@ -25,13 +25,20 @@ class RoomDetail extends StatelessWidget {
 
   RoomDetail(this.roomName,this.roomId);
 
-  final _firestore = Firestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Room Detail'),
+
+        iconTheme: IconThemeData(color: Colors.deepPurple),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: Text('Room Detail',
+        style: TextStyle(
+          color: Colors.deepPurple
+        ),),
       ),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
@@ -102,14 +109,14 @@ class RoomDetail extends StatelessWidget {
                 );
               }
 
-              final messages = snapshot.data.documents;
+              final messages = snapshot.data.docs;
 
               List<Text> sensordata = [];
 
               for (var message in messages) {
-                final humidity1 = message.data['humidity'];
-                final id1= message.data['id'];
-                final temp1 = message.data['temp'];
+                final humidity1 = message.get('humidity');
+                final id1= message.get('id');
+                final temp1 = message.get('temp');
 
                 SensorData s1 = SensorData("Humidity", humidity1);
                 // SensorData s2 = SensorData("id", id1);
@@ -131,6 +138,7 @@ class RoomDetail extends StatelessWidget {
               }
               return Expanded(
                 child: SfCircularChart(
+
                   legend: Legend(
                       overflowMode: LegendItemOverflowMode.wrap,
                       isVisible: true,
@@ -138,6 +146,7 @@ class RoomDetail extends StatelessWidget {
                   series: <RadialBarSeries>[
                     RadialBarSeries<SensorData, String>(
                         dataSource: getSensorData(),
+
                         xValueMapper: (SensorData sd, _) => sd.sensorName,
                         yValueMapper: (SensorData sd, _) => sd.value,
                         dataLabelSettings: DataLabelSettings(isVisible: true)),

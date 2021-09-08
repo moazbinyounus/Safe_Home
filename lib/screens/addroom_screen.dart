@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
-Firestore _firestore= Firestore.instance;
+
+FirebaseFirestore _firestore= FirebaseFirestore.instance;
 class AddRoom extends StatelessWidget {
   final String owner;
   AddRoom(this.owner);
@@ -103,8 +102,6 @@ class AddRoom extends StatelessWidget {
 
               _firestore.collection('device').add({'id' : device_id , 'name' : RoomName,
                 'owner' : owner});
-
-
             },
             minWidth: 200.0,
             height: 42.0,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-Firestore _firestore= Firestore.instance;
+FirebaseFirestore _firestore= FirebaseFirestore.instance;
 class PirSensor extends StatelessWidget {
   final String room_id;
 
@@ -77,12 +77,12 @@ class MessageStream extends StatelessWidget {
               ),
             );
           }
-          final messages=snapshot.data.documents.reversed;
+          final messages=snapshot.data.docs.reversed;
           List<messageBubble> messageList=[];
           for(var message in messages ){
-            final textMessage=message.data['message'];
-            final sender=message.data['timestamp'];
-            final id=message.data['id'];
+            final textMessage=message.get('message');
+            final sender=message.get('timestamp');
+            final id=message.get('id');
             DateTime messageDate=DateTime.parse(sender);
             print(textMessage);
 

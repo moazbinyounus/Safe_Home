@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-final _firestore = Firestore.instance;
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class Humidity extends StatelessWidget {
   //const Humidity({Key key}) : super(key: key);
@@ -30,16 +30,16 @@ class Humidity extends StatelessWidget {
                     );
                   }
 
-                  final messages = snapshot.data.documents.reversed;
+                  final messages = snapshot.data.docs.reversed;
 
                   List<Text> sensordata = [];
                   dataa.clear();
                   dataa2.clear();
 
                   for (var message in messages) {
-                    String temp = message.data['humidity'];
-                    String time = message.data['time'];
-                    int userId=message.data['id'];
+                    String temp = message.get('humidity');
+                    String time = message.get('time');
+                    int userId=message.get('id');
                     String useridstring=userId.toString();
 
 

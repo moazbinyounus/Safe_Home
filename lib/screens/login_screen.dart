@@ -29,8 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Flexible(
+                //flexible is used so that available screen size is used specially when keyboard pops up and changes the screen size.
                 child: Container(
                   height: 200.0,
+                  //app logo
                   child: Image.asset('images/logo.png'),
                 ),
               ),
@@ -125,6 +127,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         setState(() {
                           spinner = true;
                         });
+
+                        //following command is used to sign in, this command is part the fire auth package it signs in a user using email and password for this user has to enable sign in with email and password from firebase console
 
 
                        final newUser= await _auth.signInWithEmailAndPassword(email: email, password: password);

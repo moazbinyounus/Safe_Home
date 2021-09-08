@@ -1,3 +1,4 @@
+//this file consists of the registration functionality using firebase as the backend database which is a non sql database.
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_home/screens/rooms_screen.dart';
@@ -32,6 +33,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Flexible(
                 child: Container(
                   height: 200.0,
+                  // app logo
                   child: Image.asset('images/logo.png'),
                 ),
               ),
@@ -40,7 +42,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               TextField(
                 onChanged: (value) {
-                  //Do something with the user input.
+                  //when user writes the written string will be taken email
                   email=value;
                 },
                 decoration: InputDecoration(
@@ -65,7 +67,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               TextField(
                 onChanged: (value) {
-                  //Do something with the user input.
+                  //entered string will be saved as password
                   password= value;
                 },
                 decoration: InputDecoration(
@@ -101,8 +103,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       setState(() {
                         spinner = true;
                       });
+                      // the following command will create a new user using email and password. The command used for this is part of the fire auth library
                        final user= await _auth.createUserWithEmailAndPassword(email: email, password: password);
                         if(user != null){
+                          //navigating to room screen.
                          Navigator.pushNamed(context, RoomScreen.id);
                        }
                         setState(() {
