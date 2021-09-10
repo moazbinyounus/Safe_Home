@@ -44,7 +44,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               children: <Widget>[
                 Container(
                   //will contain the logo of the app
-                  child: Image.asset('images/logo.png'),
+                  child: Image.asset('assets/images/logo.png'),
                   height: 60.0,
                 ),
                 Text(

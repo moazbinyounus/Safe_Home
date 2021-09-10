@@ -22,7 +22,7 @@ class RoomTile extends StatelessWidget {
 
           },
           onLongPress: (){
-            print("00");
+            print(id);
             showDialog(
               context: context,
               builder: (_) => LogoutOverlay(id),
