@@ -1,9 +1,11 @@
 // this screen contains the rooms that a particular user has added
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/room_tile.dart';
 import 'addroom_screen.dart';
+import 'package:safe_home/services/getToken.dart';
 
 User currentUser;
 FirebaseFirestore _firestore= FirebaseFirestore.instance;
@@ -20,6 +22,21 @@ class _RoomScreenState extends State<RoomScreen> {
 void initState() {
     super.initState();
     getCurrentUser();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      FirebaseMessaging.instance.getToken().then((token) {
+        print("Device token $token");
+        // upodate;
+        updateUserTokenInFirebase(
+          deviceToken: token,
+          userID: FirebaseAuth.instance.currentUser.uid,
+        ).then((value) {
+          print("Token updated $value");
+        }).catchError((onError) {
+          print("Update token Error $onError");
+        });
+        // TODO: Implement Update TOken
+      });
+    });
   }
 
   void getCurrentUser()async{
