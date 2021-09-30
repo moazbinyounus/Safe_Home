@@ -18,14 +18,21 @@ import 'package:cloud_firestore/cloud_firestore.dart'
 import 'package:firebase_auth/firebase_auth.dart';
 final _auth = FirebaseAuth.instance;
 
-class RoomDetail extends StatelessWidget {
+class RoomDetail extends StatefulWidget {
   static String id = 'room_detail';
   final String roomId;
   final String roomName;
 
   RoomDetail(this.roomName,this.roomId);
 
+  @override
+  _RoomDetailState createState() => _RoomDetailState();
+}
+
+class _RoomDetailState extends State<RoomDetail> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  bool isSwitched = false;
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +78,24 @@ class RoomDetail extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Activate Motion Detection'),
+              leading: Text('Activate Motion Detection'),
+              trailing: Switch(
+                value: isSwitched,
+                onChanged: (value) {
+                  setState(() {
+                    isSwitched = value;
+                    print(isSwitched);
+                  });
+
+                },
+                activeTrackColor: Colors.lightGreenAccent,
+                activeColor: Colors.green,
+
+
+              ),
               onTap: () {
                 // Update the state of the app.
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>PirSensor(roomId)));
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>PirSensor(widget.roomId)));
 
 
                 // ...
@@ -89,9 +110,6 @@ class RoomDetail extends StatelessWidget {
                 //Navigator.of(context)push();
                 //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>WelcomeScreen.id));
                 Navigator.pushNamed(context, WelcomeScreen.id);
-
-
-
 
               },
             ),
@@ -124,11 +142,11 @@ class RoomDetail extends StatelessWidget {
 
                 dataa.clear();
                 dataa2.clear();
-                print(roomId);
+                print(widget.roomId);
 
 
-                if(id1.toString() == roomId){
-                  print(roomId);
+                if(id1.toString() == widget.roomId){
+                  print(widget.roomId);
                   print(id1.toString());
                   print('in loop');
 
@@ -163,7 +181,7 @@ class RoomDetail extends StatelessWidget {
                     child: Text("Temperature"),
                     onPressed: () {
                       //Navigator.pushNamed(context, roomId);
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Temp(roomId)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Temp(widget.roomId)));
 
                     }),
                 flex: 1,
@@ -176,7 +194,7 @@ class RoomDetail extends StatelessWidget {
                     child: Text("Humidity"),
                     onPressed: () {
                       //Navigator.pushNamed(context, Humidity.id);
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Humidity(roomId)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Humidity(widget.roomId)));
                     }),
                 flex: 1,
               ),
