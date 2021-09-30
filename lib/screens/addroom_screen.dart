@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import '../models/DialogWidget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -96,7 +97,8 @@ class AddRoom extends StatelessWidget {
                         _firestore.collection('device').add({
                           'id': device_id,
                           'name': RoomName,
-                          'owner': owner
+                          'owner': owner,
+                          'userUid': FirebaseAuth.instance.currentUser.uid,
                         });
                         showDialog(
 
