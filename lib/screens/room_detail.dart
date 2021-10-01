@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart'
     show Firestore, QuerySnapshot;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_home/screens/emergency_contacts.dart';
 import 'package:safe_home/screens/humidity.dart';
 import 'package:safe_home/screens/pirSensor.dart';
+import 'package:safe_home/screens/pir_switch.dart';
 import 'package:safe_home/screens/welcome_screen.dart';
 import '../models/room_tile.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +18,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'
     show Firestore, QuerySnapshot;
 import 'package:firebase_auth/firebase_auth.dart';
+
 final _auth = FirebaseAuth.instance;
 
 class RoomDetail extends StatefulWidget {
   static String id = 'room_detail';
   final String roomId;
   final String roomName;
+   //bool isSwitched;
+
 
   RoomDetail(this.roomName,this.roomId);
 
@@ -31,10 +36,32 @@ class RoomDetail extends StatefulWidget {
 
 class _RoomDetailState extends State<RoomDetail> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  bool isSwitched=false;
 
-  bool isSwitched = false;
+
 
   @override
+  void initState(){
+    print('initworking');
+    super.initState();
+    getSwitch(widget.roomId);
+
+
+  }
+
+
+  getSwitch(String device_id) async {
+    DocumentReference documentReference = FirebaseFirestore.instance.collection('Switch').doc(device_id);
+    bool state;
+    await documentReference.get().then((snapshot) {
+      state = snapshot.get('pir');
+      setState(() {
+        isSwitched = state==true;
+      });
+
+    });
+
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -47,73 +74,94 @@ class _RoomDetailState extends State<RoomDetail> {
           color: Colors.deepPurple
         ),),
       ),
-      drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Container(
-              height: 100,
-              child: DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
-                ),
-                child: Center(
-                  child: Text('Safe Home',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),),
+      drawer: Expanded(
+        child: Drawer(
+          // Add a ListView to the drawer. This ensures the user can scroll
+          // through the options in the drawer if there isn't enough vertical
+          // space to fit everything.
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              Container(
+                height: 100,
+                child: DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple,
+                  ),
+                  child: Center(
+                    child: Text('Safe Home',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),),
+                  ),
                 ),
               ),
-            ),
-            ListTile(
-              title: Text('Emergency Contacts'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
-              },
-            ),
-            ListTile(
-              leading: Text('Activate Motion Detection'),
-              trailing: Switch(
-                value: isSwitched,
-                onChanged: (value) {
-                  setState(() {
-                    isSwitched = value;
-                    print(isSwitched);
-                  });
+              ListTile(
+                title: Text('Emergency Contacts'),
+                onTap: () {
+                  // Update the state of the app.
+                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>EmergencyContacts(widget.roomId)));
 
                 },
-                activeTrackColor: Colors.lightGreenAccent,
-                activeColor: Colors.green,
-
-
               ),
-              onTap: () {
-                // Update the state of the app.
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>PirSensor(widget.roomId)));
+              ListTile(
+                leading: Text('Activate Motion Detection',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal
+                ),),
+                trailing: Switch(
+                  value: isSwitched,
+                  onChanged: (value) {
+                    setState(() {
+                      isSwitched = value;
+                      print(isSwitched);
+                      print(value);
+                      FirebaseFirestore.instance
+                          .collection("Switch")
+                          .doc(widget.roomId)
+                          .update({
+                        "pir": value,
+
+                      }).then((value) {
+                        return "success updated";
+                      }).catchError((onError) {
+
+                        print('contact added');
+                        return "error";
+                      });
+                    });
+
+                  },
+                  activeTrackColor: Colors.lightGreenAccent,
+                  activeColor: Colors.green,
 
 
-                // ...
-              },
-            ),
-            ListTile(
-              title: Text('Sign out'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
-                _auth.signOut();
-                //Navigator.of(context)push();
-                //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>WelcomeScreen.id));
-                Navigator.pushNamed(context, WelcomeScreen.id);
+                ),
+                onTap: () {
+                  // Update the state of the app.
+                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>PirSwitch(widget.roomId)));
 
-              },
-            ),
-          ],
+
+                  // ...
+                },
+              ),
+              ListTile(
+                title: Text('Sign out'),
+                onTap: () {
+                  // Update the state of the app.
+                  // ...
+                  _auth.signOut();
+                  //Navigator.of(context)push();
+                  //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>WelcomeScreen.id));
+                  Navigator.pushNamed(context, WelcomeScreen.id);
+
+                },
+              ),
+            ],
+          ),
         ),
       ),
         body: Column(

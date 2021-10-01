@@ -8,6 +8,7 @@ import 'addroom_screen.dart';
 import 'package:safe_home/services/getToken.dart';
 
 User currentUser;
+bool isSwitched;
 FirebaseFirestore _firestore= FirebaseFirestore.instance;
 class RoomScreen extends StatefulWidget {
   static  String id='rooms_screen';
@@ -25,7 +26,7 @@ void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       FirebaseMessaging.instance.getToken().then((token) {
         print("Device token $token");
-        // upodate;
+
         updateUserTokenInFirebase(
           deviceToken: token,
           userID: FirebaseAuth.instance.currentUser.uid,
@@ -34,7 +35,7 @@ void initState() {
         }).catchError((onError) {
           print("Update token Error $onError");
         });
-        // TODO: Implement Update TOken
+
       });
     });
   }
@@ -49,6 +50,7 @@ void initState() {
   catch (e){
       print(e);
   }}
+
   Widget build(BuildContext context) {
     return
        Scaffold(

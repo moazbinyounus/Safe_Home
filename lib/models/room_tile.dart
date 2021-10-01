@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:safe_home/screens/room_detail.dart';
 import '../models/dialod_del.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+bool isSwitched;
+getSwitch(String device_id) async {
+  DocumentReference documentReference = FirebaseFirestore.instance.collection('Switch').doc(device_id);
+  bool state;
+  await documentReference.get().then((snapshot) {
+    state = snapshot.get('pir');
+    isSwitched = state==true;
+  });
+
+}
 
 class RoomTile extends StatelessWidget {
 
@@ -18,6 +29,8 @@ class RoomTile extends StatelessWidget {
       child: GridTile(
         child: GestureDetector(
           onTap: (){
+           // getSwitch(id);
+
             Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>RoomDetail(roomName,id)));
 
           },
