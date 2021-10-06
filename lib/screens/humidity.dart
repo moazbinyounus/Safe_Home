@@ -9,7 +9,7 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class Humidity extends StatelessWidget {
   //const Humidity({Key key}) : super(key: key);
-  final String id;
+  final String id ;
   Humidity(this.id);
   @override
   Widget build(BuildContext context) {
@@ -21,10 +21,7 @@ class Humidity extends StatelessWidget {
         child: Column(
           children: <Widget>[
             StreamBuilder<QuerySnapshot>(
-                stream: _firestore
-                    .collection('finalhmd')
-                    .orderBy("time", descending: false)
-                    .snapshots(),
+                stream: _firestore.collection('finalhmd').snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     // snapshot.data.documents.forEach((element) { })
@@ -36,26 +33,27 @@ class Humidity extends StatelessWidget {
                   final messages = snapshot.data.docs.reversed;
 
                   List<Text> sensordata = [];
-                  // dataa.clear(); clearing previous data
-                  // dataa2.clear();
+                  dataa.clear();
+                  dataa2.clear();
 
                   for (var message in messages) {
-                    String humidity = message.get('humidity');
+                    String temp = message.get('humidity');
                     String time = message.get('time');
-                    int userId = message.get('id');
-                    String useridstring = userId.toString();
+                    int userId=message.get('id');
+                    String useridstring=userId.toString();
+
 
                     double timeInMin = double.parse(time);
 
-                    double humidityInDouble = double.parse(humidity);
-                    if (useridstring == id) {
-                      SensorData s = SensorData(humidityInDouble, timeInMin);
+                    double tempInDouble = double.parse(temp);
+    if(useridstring==id) {
 
-                      // dataa.clear();
-                      // dataa2.clear();
+                    SensorData s = SensorData(tempInDouble, timeInMin);
 
-                      dataa.add(s);
-                    }
+                    // dataa.clear();
+                    // dataa2.clear();
+
+                    dataa.add(s);}
                   }
                   return SfCartesianChart(
                       zoomPanBehavior: ZoomPanBehavior(
@@ -68,7 +66,7 @@ class Humidity extends StatelessWidget {
                       primaryYAxis:
                           NumericAxis(title: AxisTitle(text: 'Percentage')),
                       series: <ChartSeries>[
-                       BarSeries<SensorData, double>(
+                        ColumnSeries<SensorData, double>(
                           dataSource: getSensorData(),
                           xValueMapper: (SensorData sd, _) => sd.value,
                           yValueMapper: (SensorData sd, _) => sd.time,
@@ -101,9 +99,10 @@ List<SensorData> getSensorData() {
   for (int i = 0; i < dataa.length; i++) {
     double x = dataa[i].time;
     double y = dataa[i].value;
-    print("$x,$y");
-    // SensorData s = SensorData(x, y);
-    //dataa.add(s);
+    print(x);
+    print(y);
+    SensorData s = SensorData(x, y);
+    dataa2.add(s);
   }
-  return dataa;
+  return dataa2;
 }
