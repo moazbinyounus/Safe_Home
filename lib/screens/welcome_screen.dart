@@ -21,7 +21,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   // PushNotificationsManager p= PushNotificationsManager();
 @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
 
 

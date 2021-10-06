@@ -122,8 +122,9 @@ class _RoomDetailState extends State<RoomDetail> {
                       FirebaseFirestore.instance
                           .collection("Switch")
                           .doc(widget.roomId)
-                          .update({
-                        "pir": value,
+                          .set({
+                        "dev_id": widget.roomId,
+                        "pir" : value,
 
                       }).then((value) {
                         return "success updated";
@@ -167,7 +168,7 @@ class _RoomDetailState extends State<RoomDetail> {
         body: Column(
       children: <Widget>[
         StreamBuilder<QuerySnapshot>(
-            stream: _firestore.collection('test1').snapshots(),
+            stream: _firestore.collection('test1').orderBy('time', descending: true).limit(1).snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center(

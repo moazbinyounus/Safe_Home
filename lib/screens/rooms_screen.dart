@@ -71,13 +71,16 @@ void initState() {
           child: Column(
             children: [
               RoomStream(),
-              FloatingActionButton(onPressed: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>AddRoom(currentUser.email)));
-              },
-                backgroundColor: Colors.deepPurple,
-              child: Icon(Icons.add
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: FloatingActionButton(onPressed: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>AddRoom(currentUser.email)));
+                },
+                  backgroundColor: Colors.deepPurple,
+                child: Icon(Icons.add
 
-              ),
+                ),
+                ),
               )
             ],
           ),

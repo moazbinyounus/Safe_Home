@@ -29,7 +29,12 @@ class AddEmergency extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
-                validator: RequiredValidator(errorText: 'Required'),
+                validator: MultiValidator(
+                    [
+                      MinLengthValidator(13, errorText: 'Contact must be in +92********** format '),
+                      RequiredValidator(errorText: 'Field empty')
+                    ]
+                ),
                 //controller: messageTextController,
                 onChanged: (value) {
                  contact1 = value;
@@ -59,7 +64,12 @@ class AddEmergency extends StatelessWidget {
                 height: 20,
               ),
               TextFormField(
-                validator: RequiredValidator(errorText: 'Required'),
+                validator: MultiValidator(
+                    [
+                      MinLengthValidator(13, errorText: 'Contact must be in +92********** format '),
+                      RequiredValidator(errorText: 'Field empty')
+                    ]
+                ),
                 //controller: messageTextController,
                 onChanged: (value) {
                   contact2 = value;
@@ -102,7 +112,8 @@ class AddEmergency extends StatelessWidget {
                         FirebaseFirestore.instance
                             .collection("Emergency")
                             .doc(room_id)
-                            .update({
+                            .set({
+                          "device_id": room_id,
                           "contact1": contact1,
                           "contact2": contact2,
                         }).then((value) {
@@ -116,7 +127,7 @@ class AddEmergency extends StatelessWidget {
                         showDialog(
 
                           context: context,
-                          builder: (_) => DialogWidget('Room Added !'),
+                          builder: (_) => DialogWidget('Contacts Added !'),
 
                         );
 
@@ -124,7 +135,7 @@ class AddEmergency extends StatelessWidget {
                         showDialog(
                           // Todo: Dialog box with button navigation
                           context: context,
-                          builder: (_) => DialogWidget('Field Empty'),
+                          builder: (_) => DialogWidget('Wrong Entry'),
                         );
                       }
                     },

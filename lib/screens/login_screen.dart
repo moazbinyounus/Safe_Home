@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Form(
-            autovalidate: true,
+            // autovalidate: true,
             key: formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

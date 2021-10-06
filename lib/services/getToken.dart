@@ -22,7 +22,8 @@ Future<String> updateUserTokenInFirebase(
   return await FirebaseFirestore.instance
       .collection("users")
       .doc(userID)
-      .update({
+      .set({
+    "uid": userID,
     "deviceToken": deviceToken,
   }).then((value) {
     return "sucess";
