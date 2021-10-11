@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart'
     show Firestore, QuerySnapshot;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_home/screens/HumidityNew.dart';
+import 'package:safe_home/screens/TempNEW.dart';
 import 'package:safe_home/screens/humidity.dart';
 import 'package:safe_home/screens/pirSensor.dart';
 import 'package:safe_home/screens/welcome_screen.dart';
@@ -163,7 +165,7 @@ class RoomDetail extends StatelessWidget {
                     child: Text("Temperature"),
                     onPressed: () {
                       //Navigator.pushNamed(context, roomId);
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Temp(roomId)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>TempHomePage(roomId)));
 
                     }),
                 flex: 1,
@@ -176,7 +178,7 @@ class RoomDetail extends StatelessWidget {
                     child: Text("Humidity"),
                     onPressed: () {
                       //Navigator.pushNamed(context, Humidity.id);
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Humidity(roomId)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>HmdHomePage(roomId)));
                     }),
                 flex: 1,
               ),
