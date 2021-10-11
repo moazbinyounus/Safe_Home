@@ -170,13 +170,19 @@ class _RoomDetailState extends State<RoomDetail> {
         ],
       ),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('test1').orderBy('time', descending: true).limit(1).snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(),
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ],
                 );
               }
 
