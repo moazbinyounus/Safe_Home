@@ -49,6 +49,9 @@ dependencies:
   rxdart: ^0.27.2
   path_provider: ^2.0.4
   flutter_local_notifications: ^5.0.0+4
+  speech_to_text: ^5.1.1
+  avatar_glow: ^2.0.1
+  highlight_text: ^1.2.0
 
 
 

@@ -104,6 +104,8 @@ class _MyAppState extends State<MyApp> {
         //Temp.id: (context) => Temp(),
         //Humidity.id: (context) => Humidity(),
 
+
+
         //RoomDetail.id : (context) => RoomDetail(),
       },
     );

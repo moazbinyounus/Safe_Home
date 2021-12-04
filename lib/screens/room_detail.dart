@@ -1,9 +1,11 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'
-
     show Firestore, QuerySnapshot;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:safe_home/screens/Voice_training.dart';
 import 'package:safe_home/screens/emergency_contacts.dart';
 import 'package:safe_home/screens/humidity.dart';
 import 'package:safe_home/screens/pirSensor.dart';
@@ -20,9 +22,11 @@ import 'package:cloud_firestore/cloud_firestore.dart'
 import 'package:firebase_auth/firebase_auth.dart';
 
 final _auth = FirebaseAuth.instance;
+String report ='Calculating';
 
 class RoomDetail extends StatefulWidget {
   static String id = 'room_detail';
+  //String report ='High Humidity, opening a window might help';
   final String roomId;
   final String roomName;
    //bool isSwitched;
@@ -42,6 +46,7 @@ class _RoomDetailState extends State<RoomDetail> {
 
   @override
   void initState(){
+    //report='calculating';
     print('initworking');
     super.initState();
     getSwitch(widget.roomId);
@@ -65,14 +70,18 @@ class _RoomDetailState extends State<RoomDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        //automaticallyImplyLeading: false,
 
         iconTheme: IconThemeData(color: Colors.deepPurple),
         elevation: 0,
         backgroundColor: Colors.white,
-        title: Text('Room Detail',
-        style: TextStyle(
-          color: Colors.deepPurple
-        ),),
+        title: Container(
+          padding: EdgeInsets.only(left: 70),
+          child: Text(widget.roomName,
+          style: TextStyle(
+            color: Colors.deepPurple
+          ),),
+        ),
       ),
       drawer: Column(
         children: [
@@ -101,6 +110,7 @@ class _RoomDetailState extends State<RoomDetail> {
                     ),
                   ),
                   ListTile(
+
                     title: Text('Emergency Contacts'),
                     onTap: () {
                       // Update the state of the app.
@@ -145,10 +155,16 @@ class _RoomDetailState extends State<RoomDetail> {
                     ),
                     onTap: () {
                       // Update the state of the app.
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>PirSwitch(widget.roomId)));
+                      //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>PirSwitch(widget.roomId)));
 
 
                       // ...
+                    },
+                  ),
+                  ListTile(
+                    title: Text('voice training'),
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>VoiceTraining(widget.roomId)));
                     },
                   ),
                   ListTile(
@@ -166,15 +182,29 @@ class _RoomDetailState extends State<RoomDetail> {
                 ],
               ),
             ),
-          ),
+          )
         ],
       ),
         body: Column(
+
       children: <Widget>[
-        StreamBuilder<QuerySnapshot>(
+        Container(child: Text(report,
+          style: TextStyle(
+            //fontWeight: FontWeight.bold,
+              fontSize: 17,
+              color: Colors.black87
+          ),
+        )),
+
+
+        StreamBuilder<QuerySnapshot> (
             stream: _firestore.collection('test1').orderBy('time', descending: true).limit(1).snapshots(),
+            // todo: check for other rooms
+
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
+
+
                 return Center(
                   child: CircularProgressIndicator(),
                 );
@@ -182,7 +212,7 @@ class _RoomDetailState extends State<RoomDetail> {
 
               final messages = snapshot.data.docs;
 
-              List<Text> sensordata = [];
+              //List<Text> sensordata = [];
 
               for (var message in messages) {
                 final humidity1 = message.get('humidity');
@@ -196,6 +226,7 @@ class _RoomDetailState extends State<RoomDetail> {
                 dataa.clear();
                 dataa2.clear();
                 print(widget.roomId);
+                //report='no data';
 
 
                 if(id1.toString() == widget.roomId){
@@ -203,12 +234,33 @@ class _RoomDetailState extends State<RoomDetail> {
                   print(id1.toString());
                   print('in loop');
 
+
+                  if( temp1 < 40 && humidity1 < 70){
+                    report= 'Temperature and Humidity are at Optimum Levels';
+                  }
+                  else if (temp1 > 40){
+                    report = 'Temprature is High';
+                  }
+                  else if (humidity1 > 70){
+                    report = 'Humidity High Chance of Fungus';
+                  }
                 dataa.add(s1);
-                //dataa.add(s2);
-                dataa.add(s3);}
+                dataa.add(s3);
+                }
+                if(id1.toString() != widget.roomId){
+                  report='No data for this device';
+                  print (report);
+                }
+
+                print(humidity1);
+
               }
               return Expanded(
                 child: SfCircularChart(
+
+
+                  //palette: [Colors.green,Colors.red],
+
 
                   legend: Legend(
                       overflowMode: LegendItemOverflowMode.wrap,
@@ -225,32 +277,27 @@ class _RoomDetailState extends State<RoomDetail> {
                 ),
               );
             }),
+        //SummaryGenerator(widget.roomId),
         Row(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Expanded(
-                child: OutlinedButton(
-                    child: Text("Temperature"),
-                    onPressed: () {
-                      //Navigator.pushNamed(context, roomId);
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Temp(widget.roomId)));
+            Expanded(
+              child: OutlinedButton(
+                  child: Text("Temperature"),
+                  onPressed: () {
+                    //Navigator.pushNamed(context, roomId);
+                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Temp(widget.roomId)));
 
-                    }),
-                flex: 1,
-              ),
+                  }),
+              //flex: 1,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Expanded(
-                child: OutlinedButton(
-                    child: Text("Humidity"),
-                    onPressed: () {
-                      //Navigator.pushNamed(context, Humidity.id);
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Humidity(widget.roomId)));
-                    }),
-                flex: 1,
-              ),
+            Expanded(
+              child: OutlinedButton(
+                  child: Text("Humidity"),
+                  onPressed: () {
+                    //Navigator.pushNamed(context, Humidity.id);
+                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Humidity(widget.roomId)));
+                  }),
+              //flex: 1,
             ),
           ],
           mainAxisAlignment: MainAxisAlignment.center,

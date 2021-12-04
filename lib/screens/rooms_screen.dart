@@ -96,10 +96,15 @@ class RoomStream extends StatelessWidget {
         stream: _firestore.collection('device').snapshots(),
         builder: (context,snapshot){
           if (!snapshot.hasData){
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.deepPurple,
-              ),
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.deepPurple,
+                  ),
+                ),
+              ],
             );
           }
           final messages=snapshot.data.docs;
