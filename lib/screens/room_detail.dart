@@ -1,9 +1,12 @@
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'
     show Firestore, QuerySnapshot;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_home/screens/TempNEW.dart';
+import 'HumidityNew.dart';
 
 import 'package:safe_home/screens/Voice_training.dart';
 import 'package:safe_home/screens/emergency_contacts.dart';
@@ -41,6 +44,8 @@ class RoomDetail extends StatefulWidget {
 class _RoomDetailState extends State<RoomDetail> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool isSwitched=false;
+  bool smokeSwitch= false;
+  // todo: Make switch function and
 
 
 
@@ -50,6 +55,7 @@ class _RoomDetailState extends State<RoomDetail> {
     print('initworking');
     super.initState();
     getSwitch(widget.roomId);
+    getSmokeSwitch(widget.roomId);
 
 
   }
@@ -67,21 +73,32 @@ class _RoomDetailState extends State<RoomDetail> {
     });
 
   }
+  getSmokeSwitch(String device_id) async {
+    DocumentReference documentReference = FirebaseFirestore.instance.collection('smoke_switch').doc(device_id);
+    bool state;
+    await documentReference.get().then((snapshot) {
+      state = snapshot.get('smoke');
+      setState(() {
+        smokeSwitch = state==true;
+      });
+
+    });
+
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         //automaticallyImplyLeading: false,
 
         iconTheme: IconThemeData(color: Colors.deepPurple),
         elevation: 0,
         backgroundColor: Colors.white,
-        title: Container(
-          padding: EdgeInsets.only(left: 70),
-          child: Text(widget.roomName,
-          style: TextStyle(
-            color: Colors.deepPurple
-          ),),
-        ),
+        title: Text(widget.roomName,
+
+        style: TextStyle(
+          color: Colors.deepPurple
+        ),),
       ),
       drawer: Column(
         children: [
@@ -111,7 +128,10 @@ class _RoomDetailState extends State<RoomDetail> {
                   ),
                   ListTile(
 
-                    title: Text('Emergency Contacts'),
+                    title: Text('Emergency Contacts',
+                    style: TextStyle(
+                      color: Colors.black87
+                    ),),
                     onTap: () {
                       // Update the state of the app.
                       Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>EmergencyContacts(widget.roomId)));
@@ -121,12 +141,16 @@ class _RoomDetailState extends State<RoomDetail> {
                   ListTile(
                     leading: Text('Activate Motion Detection',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.black87,
                       fontWeight: FontWeight.normal
                     ),),
                     trailing: Switch(
+
+
                       value: isSwitched,
+
                       onChanged: (value) {
+
                         setState(() {
                           isSwitched = value;
                           print(isSwitched);
@@ -150,6 +174,7 @@ class _RoomDetailState extends State<RoomDetail> {
                       },
                       activeTrackColor: Colors.lightGreenAccent,
                       activeColor: Colors.green,
+                      
 
 
                     ),
@@ -162,10 +187,45 @@ class _RoomDetailState extends State<RoomDetail> {
                     },
                   ),
                   ListTile(
+                    leading: Text('Smoke Switch'),
+                    trailing: Switch(
+                      value: smokeSwitch,
+                      onChanged: (value) {
+                        setState(() {
+                          smokeSwitch = value;
+                          print(smokeSwitch);
+                          print(value);
+                          FirebaseFirestore.instance
+                              .collection("smoke_switch")
+                              .doc(widget.roomId)
+                              .set({
+                            "dev_id": widget.roomId,
+                            "smoke" : value,
+
+                          }).then((value) {
+                            return "success updated";
+                          }).catchError((onError) {
+
+                            print('switch updated');
+                            return "error";
+                          });
+                        });
+
+                      },
+                      activeTrackColor: Colors.lightGreenAccent,
+                      activeColor: Colors.green,
+
+
+                    ),
+                  ),
+                  ListTile(
                     title: Text('voice training'),
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>VoiceTraining(widget.roomId)));
                     },
+                  ),
+                  ListTile(
+                    title: Text('Notifications'),
                   ),
                   ListTile(
                     title: Text('Sign out'),
@@ -188,13 +248,32 @@ class _RoomDetailState extends State<RoomDetail> {
         body: Column(
 
       children: <Widget>[
-        Container(child: Text(report,
-          style: TextStyle(
-            //fontWeight: FontWeight.bold,
-              fontSize: 17,
-              color: Colors.black87
+        Padding(
+          padding: const EdgeInsets.only(top: 45.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(child: Text(report,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  //fontWeight: FontWeight.bold,
+
+
+                  fontSize: 17,
+                  //fontFamily: 'NunitoSans',
+                  color: Colors.black87,
+
+
+
+
+                ),
+              ),
+
+
+              ),
+            ],
           ),
-        )),
+        ),
 
 
         StreamBuilder<QuerySnapshot> (
@@ -281,22 +360,30 @@ class _RoomDetailState extends State<RoomDetail> {
         Row(
           children: <Widget>[
             Expanded(
-              child: OutlinedButton(
-                  child: Text("Temperature"),
-                  onPressed: () {
-                    //Navigator.pushNamed(context, roomId);
-                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Temp(widget.roomId)));
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 25.0 , left: 10),
+                child: OutlinedButton(
+                    child: Text("Temperature"),
+                    onPressed: () {
+                      //Navigator.pushNamed(context, roomId);
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>TempHomePage(widget.roomId,widget.roomName)));
 
-                  }),
+                    }),
+              ),
               //flex: 1,
             ),
+            SizedBox(width: 10,),
             Expanded(
-              child: OutlinedButton(
-                  child: Text("Humidity"),
-                  onPressed: () {
-                    //Navigator.pushNamed(context, Humidity.id);
-                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Humidity(widget.roomId)));
-                  }),
+              child: Padding(
+
+                padding: const EdgeInsets.only(bottom:25,right: 10),
+                child: OutlinedButton(
+                    child: Text("Humidity"),
+                    onPressed: () {
+                      //Navigator.pushNamed(context, Humidity.id);
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>HmdHomePage(widget.roomId,widget.roomName)));
+                    }),
+              ),
               //flex: 1,
             ),
           ],

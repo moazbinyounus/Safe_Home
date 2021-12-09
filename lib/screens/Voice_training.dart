@@ -132,8 +132,9 @@ class _VoiceTrainingState extends State<VoiceTraining> {
 
   void updateWords() {
     _fs.collection('VoiceTraining').doc("1").set({
-      'id': RoomScreen.id,
+      'id': widget.RoomID,
       'words': _text,
     });
   }
 }
+
