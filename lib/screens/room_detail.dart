@@ -1,15 +1,20 @@
 
+//import 'dart:html';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'
     show Firestore, QuerySnapshot;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_home/screens/FaceRecogList.dart';
 import 'package:safe_home/screens/TempNEW.dart';
+import 'package:safe_home/screens/face_recog_history.dart';
 import 'HumidityNew.dart';
+import 'notifications.dart';
 
 import 'package:safe_home/screens/Voice_training.dart';
 import 'package:safe_home/screens/emergency_contacts.dart';
+import 'package:safe_home/screens/face_recognition.dart';
 import 'package:safe_home/screens/humidity.dart';
 import 'package:safe_home/screens/pirSensor.dart';
 import 'package:safe_home/screens/pir_switch.dart';
@@ -65,24 +70,36 @@ class _RoomDetailState extends State<RoomDetail> {
     DocumentReference documentReference = FirebaseFirestore.instance.collection('Switch').doc(device_id);
     bool state;
     await documentReference.get().then((snapshot) {
+      if(snapshot.exists){
       state = snapshot.get('pir');
       setState(() {
         isSwitched = state==true;
-      });
+      }
+      );}
+      else{
+        isSwitched= false;
+      }
 
-    });
+    }
+    );
 
   }
   getSmokeSwitch(String device_id) async {
     DocumentReference documentReference = FirebaseFirestore.instance.collection('smoke_switch').doc(device_id);
     bool state;
     await documentReference.get().then((snapshot) {
+      if(snapshot.exists){
+
       state = snapshot.get('smoke');
       setState(() {
         smokeSwitch = state==true;
-      });
+      });}
+      else{
+        smokeSwitch=false;
+      }
 
-    });
+    }
+      );
 
   }
   Widget build(BuildContext context) {
@@ -93,7 +110,7 @@ class _RoomDetailState extends State<RoomDetail> {
 
         iconTheme: IconThemeData(color: Colors.deepPurple),
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.white38,
         title: Text(widget.roomName,
 
         style: TextStyle(
@@ -127,8 +144,12 @@ class _RoomDetailState extends State<RoomDetail> {
                     ),
                   ),
                   ListTile(
+                    leading: Icon(Icons.contact_phone,
+                    color: Colors.deepPurple,
+                    ),
 
                     title: Text('Emergency Contacts',
+
                     style: TextStyle(
                       color: Colors.black87
                     ),),
@@ -139,7 +160,9 @@ class _RoomDetailState extends State<RoomDetail> {
                     },
                   ),
                   ListTile(
-                    leading: Text('Activate Motion Detection',
+                    leading: Icon(Icons.person_remove_alt_1_rounded,
+                    color: Colors.deepPurple),
+                    title: Text('Activate Motion Detection',
                     style: TextStyle(
                       color: Colors.black87,
                       fontWeight: FontWeight.normal
@@ -187,7 +210,10 @@ class _RoomDetailState extends State<RoomDetail> {
                     },
                   ),
                   ListTile(
-                    leading: Text('Smoke Switch'),
+                    leading: Icon(Icons.local_fire_department,
+                      color: Colors.deepPurple,
+                    ),
+                    title: Text('Smoke Switch'),
                     trailing: Switch(
                       value: smokeSwitch,
                       onChanged: (value) {
@@ -219,15 +245,45 @@ class _RoomDetailState extends State<RoomDetail> {
                     ),
                   ),
                   ListTile(
-                    title: Text('voice training'),
+                    leading: Icon(Icons.keyboard_voice,
+                    color: Colors.deepPurple,),
+                    title: Text('Voice training'),
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>VoiceTraining(widget.roomId)));
                     },
                   ),
+                  // ListTile(
+                  //   leading: Icon(Icons.list,
+                  //     color: Colors.deepPurple,),
+                  //   title: Text('Recognized Faces'),
+                  //   onTap: (){
+                  //     Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>MainPage(widget.roomId)));
+                  //   },
+                  // ),
+
+
                   ListTile(
+                    leading: Icon(Icons.face,
+                      color: Colors.deepPurple,),
+                    title: Text('Face Recognition'),
+                    onTap: (){
+                      //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Home(widget.roomId)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>FaceRecog(widget.roomId)));
+                    },
+                  ),
+
+                  ListTile(
+                    leading: Icon(Icons.notification_important_sharp,
+                    color:Colors.deepPurple),
                     title: Text('Notifications'),
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Notifications(widget.roomId)));
+                    },
                   ),
                   ListTile(
+                    leading: Icon(Icons.logout,
+                    color: Colors.deepPurple,
+                    ),
                     title: Text('Sign out'),
                     onTap: () {
                       // Update the state of the app.

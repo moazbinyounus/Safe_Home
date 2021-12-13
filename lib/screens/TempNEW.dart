@@ -1,8 +1,13 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:safe_home/models/DialogWidget.dart';
 import 'package:safe_home/models/tempModel.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+DateTime dateToday =new DateTime.now();
+String currentDate = dateToday.toString().substring(0,10);
 class TempHomePage extends StatefulWidget {
   final  String id;
   final String roomName;
@@ -51,18 +56,39 @@ class _TempHomePageState extends State<TempHomePage> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.
-        collection("finaltemp")
-        .orderBy("time", descending: false)
-        .snapshots(),
+      // stream: _firestore.
+      //   collection("finaltemp")
+      //   .orderBy("time", descending: false)
+      //   .snapshots(),
+      stream: _firestore.collection('finaltemp').orderBy('time',descending: false).where('id', isEqualTo: widget.id).where('pdate',isEqualTo: currentDate).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();
         } else {
-          List<TempModel> temp = snapshot.data.docs
-              .map((QueryDocumentSnapshot) => TempModel.fromMap(QueryDocumentSnapshot.data()))
-              .toList();
-          return _buildChart(context, temp);
+          final streamer=snapshot.data.docs;
+          for(var reading in streamer ){
+            String roomid=reading.get('id');
+            String readingId=reading.get('pdate');
+            String roomId= roomid.toString();
+            print('roomid'+roomId);
+            print('id from fire'+widget.id);
+            // DateTime dateToday =new DateTime.now();
+            // String currentDate = dateToday.toString().substring(0,10);
+
+
+
+              List<TempModel> temp = streamer
+                  .map((QueryDocumentSnapshot) => TempModel.fromMap(QueryDocumentSnapshot.data()))
+                  .toList();
+              return _buildChart(context, temp);
+
+
+
+            }
+
+
+            return DialogWidget("No Data");
+          //
         }
       },
     );
@@ -90,8 +116,16 @@ class _TempHomePageState extends State<TempHomePage> {
                 ),
                 Expanded(
                   child: charts.LineChart(_seriesBarData,
+                    domainAxis: const charts.NumericAxisSpec(
+                      tickProviderSpec: charts.BasicNumericTickProviderSpec(zeroBound: false),
+                    ),
+                    primaryMeasureAxis: new charts.NumericAxisSpec(tickProviderSpec:
+                    new charts.BasicNumericTickProviderSpec(zeroBound: false)),
+
                     animate: true,
                     animationDuration: Duration(seconds:2),
+
+
                     behaviors: [
                       new charts.PanAndZoomBehavior(),
                       // new charts.DatumLegend(
@@ -102,7 +136,8 @@ class _TempHomePageState extends State<TempHomePage> {
                       // )
                       new charts.LinePointHighlighter(
                           showHorizontalFollowLine:
-                          charts.LinePointHighlighterFollowLineType.none,
+                          charts.LinePointHighlighterFollowLineType.none
+                          ,
                           showVerticalFollowLine:
                           charts.LinePointHighlighterFollowLineType.nearest),
                       // Optional - By default, select nearest is configured to trigger

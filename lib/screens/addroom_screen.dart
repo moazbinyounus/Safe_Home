@@ -17,7 +17,16 @@ class AddRoom extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Room'),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colors.white38,
+        elevation: 0,
+        title: Text('Add Room',
+        style: TextStyle(
+          color: Colors.deepPurple
+
+        ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -27,7 +36,7 @@ class AddRoom extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
-                validator: RequiredValidator(errorText: 'Reruired'),
+                validator: RequiredValidator(errorText: 'Required'),
                 //controller: messageTextController,
                 onChanged: (value) {
                   device_id = value;

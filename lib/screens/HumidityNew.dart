@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:safe_home/models/DialogWidget.dart';
 import 'package:safe_home/models/humidityModel.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+DateTime dateToday =new DateTime.now();
+String currentDate = dateToday.toString().substring(0,10);
 
 class HmdHomePage extends StatefulWidget {
   final String id;
   final String roomName;
+  //final num dev_is ;
   HmdHomePage(this.id, this.roomName);
   @override
   _HmdHomePageState createState() {
@@ -56,17 +60,44 @@ class _HmdHomePageState extends State<HmdHomePage> {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection("finalhmd")
-          .orderBy("time", descending: false)
+          .orderBy("time", descending: false).where('pdate', isEqualTo: currentDate).where('id', isEqualTo: widget.id)
           .snapshots(),
+      //stream: _firestore.collection('finalhmd').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();
         } else {
-          List<HumidityModel> temp = snapshot.data.docs
-              .map((QueryDocumentSnapshot) =>
+          final streamer=snapshot.data.docs;
+          //List<RoomTile> messageList=[];
+          for(var reading in streamer ){
+            String roomid=reading.get('id');
+            String readingDate=reading.get('pdate');
+            String roomId= roomid.toString();
+            print('roomid'+roomId);
+            print('id from fire'+widget.id);
+            // DateTime dateToday =new DateTime.now();
+            // String currentDate = dateToday.toString().substring(0,10);
+            // print(currentDate);
+            print(readingDate);
+
+
+            //if( roomId == widget.id ){
+
+              List<HumidityModel> temp = streamer
+                  .map((QueryDocumentSnapshot) =>
                   HumidityModel.fromMap(QueryDocumentSnapshot.data()))
-              .toList();
-          return _buildChart(context, temp);
+                  .toList();
+              return _buildChart(context, temp);
+
+           // else{print('canceled');}
+
+          }
+          return DialogWidget('No Data, Check Device');
+
+
+
+
+          //return _buildChart(context, temp);
         }
       },
     );
@@ -98,6 +129,11 @@ class _HmdHomePageState extends State<HmdHomePage> {
                 Expanded(
                   child: charts.LineChart(
                     _seriesBarData,
+                    domainAxis: const charts.NumericAxisSpec(
+                      tickProviderSpec: charts.BasicNumericTickProviderSpec(zeroBound: false),
+                    ),
+                    primaryMeasureAxis: new charts.NumericAxisSpec(tickProviderSpec:
+                    new charts.BasicNumericTickProviderSpec(zeroBound: false)),
                     animate: true,
                     animationDuration: Duration(seconds: 2),
                     behaviors: [

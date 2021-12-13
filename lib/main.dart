@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
 
     flutterLocalNotificationsPlugin.initialize(initSetttings,
         onSelectNotification: onSelectNotification);
-
+    WidgetsFlutterBinding.ensureInitialized();
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
       print("message recieved");
       print("Notification data is ${event.data}");

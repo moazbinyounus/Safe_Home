@@ -9,8 +9,9 @@ class ContactTile extends StatelessWidget {
   final String room_id;
   final String contact1;
   final String contact2;
+  final String address;
 
-  ContactTile(this.room_id, this.contact1, this.contact2);
+  ContactTile(this.room_id, this.contact1, this.contact2,this.address);
   @override
   Widget build(BuildContext context) {
 
@@ -21,35 +22,82 @@ class ContactTile extends StatelessWidget {
 
 
 
-          child: Container(
-            color: Colors.white,
-            child: Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '$contact1',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.normal,
-                      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+
+
+                decoration: BoxDecoration(
+
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black54,
                     ),
                   ),
-                  Text(
-                    '$contact2',
+                ),
+                child: ListTile(
+                  leading: Icon(
+                    Icons.phone,
+                    color: Colors.deepPurple,
+                  ),
+                  title: Text(
+                    '$contact1',
                     style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25,
+                      //color: Colors.deepPurple,
+                      fontSize: 20,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
-
-                ],
+                ),
               ),
-            ),
+              Container(
 
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.phone,
+                  color: Colors.deepPurple,),
+                  title: Text(
+                    '$contact2',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.location_on,
+                    color: Colors.deepPurple,),
+
+                  title: Text(
+                    'Address: $address',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ),
+              ),
+
+            ],
           ),
         ),
 

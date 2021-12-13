@@ -38,7 +38,15 @@ class _VoiceTrainingState extends State<VoiceTraining> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Voice Training'),
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          backgroundColor: Colors.white38,
+          elevation: 0,
+          title: Text('Voice Training',
+          style: TextStyle(
+            color: Colors.deepPurple
+          ),
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: AvatarGlow(

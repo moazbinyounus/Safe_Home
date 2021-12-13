@@ -9,18 +9,20 @@ import 'package:safe_home/services/getToken.dart';
 
 User currentUser;
 bool isSwitched;
-FirebaseFirestore _firestore= FirebaseFirestore.instance;
+FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
 class RoomScreen extends StatefulWidget {
-  static  String id='rooms_screen';
+  static String id = 'rooms_screen';
   @override
   _RoomScreenState createState() => _RoomScreenState();
 }
+
 class _RoomScreenState extends State<RoomScreen> {
-  final _auth=FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
   @override
 
   // here init is used to get current user for further uses
-void initState() {
+  void initState() {
     super.initState();
     getCurrentUser();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -35,57 +37,63 @@ void initState() {
         }).catchError((onError) {
           print("Update token Error $onError");
         });
-
       });
     });
   }
 
-  void getCurrentUser()async{
-    try{
-    final user= await _auth.currentUser;
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser;
 
-    if(user != null){
-      currentUser = user;
-  }}
-  catch (e){
+      if (user != null) {
+        currentUser = user;
+      }
+    } catch (e) {
       print(e);
-  }}
+    }
+  }
 
   Widget build(BuildContext context) {
-    return
-       Scaffold(
-        appBar: AppBar(
-          //foregroundColor: Colors.blueAccent,
-          elevation: 0,
+    return Scaffold(
+      appBar: AppBar(
+        //foregroundColor: Colors.blueAccent,
+        elevation: 0,
 
-          backgroundColor: Colors.white,
-          shadowColor: Colors.white,
-          automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        shadowColor: Colors.white,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
 
-          title: Text('Room Management',
-          style: TextStyle(
-            color: Colors.deepPurple
-          ),),
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              RoomStream(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: FloatingActionButton(onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>AddRoom(currentUser.email)));
-                },
-                  backgroundColor: Colors.deepPurple,
-                child: Icon(Icons.add
-
-                ),
-                ),
-              )
-            ],
+        title: Text(
+          'Rooms',
+          style: TextStyle(color: Colors.deepPurple,
+          //fontSize: 25,
           ),
         ),
-      );
+      ),
+      bottomNavigationBar: TextButton(
+        child: Icon(
+          Icons.add_circle_outline,
+          color: Colors.deepPurple,
+          size: 30,
+        ),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) => AddRoom(currentUser.email),
+            ),
+          );
+        },
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            RoomStream(),
+
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -94,46 +102,46 @@ class RoomStream extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('device').snapshots(),
-        builder: (context,snapshot){
-          if (!snapshot.hasData){
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Center(
-                  child: CircularProgressIndicator(
+                  child: LinearProgressIndicator(
                     backgroundColor: Colors.deepPurple,
                   ),
                 ),
               ],
             );
           }
-          final messages=snapshot.data.docs;
-          List<RoomTile> messageList=[];
-          for(var message in messages ){
-            final roomid=message.get('id');
-            final roomname=message.get('name');
-            final roomowner=message.get('owner');
-            final currentLogger=currentUser.email;
+          final messages = snapshot.data.docs;
+          List<RoomTile> messageList = [];
+          for (var message in messages) {
+            final roomid = message.get('id');
+            final roomname = message.get('name');
+            final roomowner = message.get('owner');
+            final currentLogger = currentUser.email;
 
-            if( currentLogger == roomowner ){
-
-            final singleMessage=RoomTile( roomid , roomname, roomowner);
-            messageList.add(singleMessage);}
-
+            if (currentLogger == roomowner) {
+              final singleMessage = RoomTile(roomid, roomname, roomowner);
+              messageList.add(singleMessage);
+            }
           }
           return Expanded(
-            child:  GridView.builder(
+            child: GridView.builder(
               padding: const EdgeInsets.all(10.0),
               itemCount: messageList.length,
-              itemBuilder: (ctx,i)=>RoomTile(messageList[i].id,messageList[i].roomName,messageList[i].owner),
+              itemBuilder: (ctx, i) => RoomTile(messageList[i].id,
+                  messageList[i].roomName, messageList[i].owner),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 3/3,crossAxisSpacing: 10,mainAxisSpacing: 10,
-
+                crossAxisCount: 2,
+                childAspectRatio: 3 / 3,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
               ),
             ),
           );
-
-        }
-    );
+        });
   }
 }
