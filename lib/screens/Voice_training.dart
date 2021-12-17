@@ -23,7 +23,8 @@ class _VoiceTrainingState extends State<VoiceTraining> {
   bool _isListening = false;
   String _text = 'Press the button and start speaking ';
   double confidence = 1.0;
-  String word;
+  String word='No word Saved';
+  String id;
   @override
   void initState() {
     // TODO: implement initState
@@ -74,8 +75,18 @@ class _VoiceTrainingState extends State<VoiceTraining> {
                 final messages = snapshot.data.docs;
 
                 for (var message in messages) {
+                  var rooid=message.get('id');
+                  if(rooid ==widget.RoomID){
+
                   word = message.get('words');
+                  if(word==''){
+                    word='No Word Saved';
+                  }
+
+                  }
+
                 }
+
                 return Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text('Previously Saved Words: $word'),
@@ -125,12 +136,19 @@ class _VoiceTrainingState extends State<VoiceTraining> {
   String _getTrainedwords() {
     _fs.collection('VoiceTraining').get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
+        var rid=doc['id'];
+        if(rid == widget.RoomID){
         print(doc["words"]);
-        word = doc["words"];
+        word = doc["words"];}
+        else{
+          word='';
+        }
+
+
       });
     });
 
-    if (word == null) {
+    if (word == '') {
       word = 'noting is saved before ';
       return word;
     } else {
@@ -139,10 +157,12 @@ class _VoiceTrainingState extends State<VoiceTraining> {
   }
 
   void updateWords() {
-    _fs.collection('VoiceTraining').doc("1").set({
+
+    if(_text!='Press the button and start speaking '){
+    _fs.collection('VoiceTraining').doc(widget.RoomID).set({
       'id': widget.RoomID,
       'words': _text,
-    });
+    });}
   }
 }
 
