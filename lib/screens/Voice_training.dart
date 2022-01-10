@@ -94,16 +94,25 @@ class _VoiceTrainingState extends State<VoiceTraining> {
               }),
           SingleChildScrollView(
             reverse: true,
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
-              child: Text(
-                '$_text',
-                style: TextStyle(
-                  fontSize: 32.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: 400,
+                  width: 400,
+                  padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
+                  child: Center(
+                    child: Text(
+                      '$_text',
+                      style: TextStyle(
+                        fontSize: 32.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
           TextButton(onPressed: updateWords, child: Text('Done'))

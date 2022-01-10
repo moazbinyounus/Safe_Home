@@ -56,71 +56,78 @@ class FaceTile extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
-      child: GridTile(
+      child: Card(
+        elevation: 10,
+        child: GridTile(
 
-        child: GestureDetector(
-
-
-
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Flexible(
-                child: Container(
-                  //color: Colors.deepPurple,
+          child: GestureDetector(
 
 
-                  decoration: BoxDecoration(
 
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.black54,
+            child: Container(
+              //height: 500,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    //color: Colors.deepPurple,
+
+
+                    decoration: BoxDecoration(
+
+                      border: Border(
+                        // bottom: BorderSide(
+                        //   color: Colors.black54,
+                        // ),
                       ),
                     ),
-                  ),
-                  child: ListTile(
-                    leading: Text(title),
-                    title: Text(
-                      '$content',
-                      style: TextStyle(
-                        //color: Colors.deepPurple,
-                        //fontSize: 20,
-                        fontWeight: FontWeight.normal,
+                    child: ListTile(
+                      //leading: Text(title),
+                      title: Text(
+                        '$content',
+                        style: TextStyle(
+                          //color: Colors.deepPurple,
+                          //fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
-                    ),
-                    onTap:  ()async{
+                      onTap:  ()async{
 
-                      //downloadFile(url, "video", "/storage/emulated/0/Downloads");
-                      //MyVideoScreen();
-                      final videoPlayerController =
-                      VideoPlayerController.network(url);
-                      await videoPlayerController.initialize();
+                        //downloadFile(url, "video", "/storage/emulated/0/Downloads");
+                        //MyVideoScreen();
+                        final videoPlayerController =
+                        VideoPlayerController.network(url);
+                        await videoPlayerController.initialize();
 
-                      final chewieController = ChewieController(
-                        videoPlayerController: videoPlayerController,
-                        autoPlay: true,
-                        looping: true,
-                      );
-                      showDialog(context: context, builder: (context) {
-                        return Dialog(
-                          child: Container(child: Chewie(
-                            controller: chewieController,
-                          ) ),
+                        final chewieController = ChewieController(
+                          videoPlayerController: videoPlayerController,
+                          autoPlay: true,
+                          looping: true,
                         );
-                      });
+                        showDialog(context: context, builder: (context) {
+                          return Card(
 
 
-                    }
+                              child: Chewie(
+                              controller: chewieController,
+                            ),
+
+                          );
+                        });
+
+
+                      }
+                    ),
                   ),
-                ),
+
+
+
+                ],
               ),
-
-
-
-            ],
+            ),
           ),
-        ),
 
+        ),
       ),
     );
   }
