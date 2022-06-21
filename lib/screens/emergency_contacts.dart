@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:safe_home/constants.dart';
 import 'package:safe_home/models/DialogWidget.dart';
 import 'package:safe_home/models/NotificationTile.dart';
 import 'package:safe_home/models/contact_tile.dart';
@@ -22,7 +23,7 @@ class EmergencyContacts extends StatelessWidget {
           Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>AddEmergency(room_id)));
 
         },
-        child: Icon(Icons.add_circle_outline,color: Colors.deepPurple,size: 30,),
+        child: Icon(Icons.add_circle_outline,color: kThemeColor,size: 30,),
       ),
       appBar: AppBar(
         elevation: 0,
@@ -32,7 +33,7 @@ class EmergencyContacts extends StatelessWidget {
         title: Text(
           'Emergency Contacts',
           style: TextStyle(
-            color: Colors.deepPurple
+            color: kThemeColor
           ),
         ),
       ),
@@ -56,7 +57,7 @@ class ContactStream extends StatelessWidget {
           if (!snapshot.hasData){
             return Center(
               child: LinearProgressIndicator(
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: kThemeColor,
               ),
             );
           }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_home/constants.dart';
 import 'package:safe_home/models/DialogWidget.dart';
 import 'package:safe_home/models/NotificationTile.dart';
 import 'package:safe_home/models/delNotification.dart';
@@ -22,7 +23,7 @@ class Notifications extends StatelessWidget {
           //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>AddEmergency(room_id)));
 
         },
-        child: Icon(Icons.delete,color: Colors.deepPurple,size: 30,),
+        child: Icon(Icons.delete,color: kThemeColor,size: 30,),
       ),
       appBar: AppBar(
         elevation: 0,
@@ -32,7 +33,7 @@ class Notifications extends StatelessWidget {
         title: Text(
           'Notfications',
           style: TextStyle(
-              color: Colors.deepPurple
+              color: kThemeColor
           ),
         ),
       ),

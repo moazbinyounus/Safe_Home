@@ -6,6 +6,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_home/constants.dart';
 
 
 FirebaseFirestore _fs = FirebaseFirestore.instance;
@@ -30,7 +31,7 @@ class _HomeState extends State<Home> {
           elevation: 0,
           title: Text('Upload Image',
           style: TextStyle(
-            color: Colors.deepPurple
+            color: kThemeColor
           ),
           ),
         automaticallyImplyLeading: false,
@@ -80,7 +81,7 @@ class _HomeState extends State<Home> {
                   style: TextStyle(
                     color: Colors.white,
                   ),),
-                  color: Colors.deepPurple,
+                  color: kThemeColor,
                   onPressed: () => uploadImage(),
                 ),
               ),

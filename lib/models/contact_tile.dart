@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safe_home/constants.dart';
 import 'package:safe_home/screens/room_detail.dart';
 import '../models/dialod_del.dart';
 
@@ -39,7 +40,7 @@ class ContactTile extends StatelessWidget {
                 child: ListTile(
                   leading: Icon(
                     Icons.phone,
-                    color: Colors.deepPurple,
+                    color: kThemeColor,
                   ),
                   title: Text(
                     '$contact1',
@@ -62,7 +63,7 @@ class ContactTile extends StatelessWidget {
                 ),
                 child: ListTile(
                   leading: Icon(Icons.phone,
-                  color: Colors.deepPurple,),
+                  color: kThemeColor,),
                   title: Text(
                     '$contact2',
                     style: TextStyle(
@@ -84,7 +85,7 @@ class ContactTile extends StatelessWidget {
                 ),
                 child: ListTile(
                   leading: Icon(Icons.location_on,
-                    color: Colors.deepPurple,),
+                    color: kThemeColor,),
 
                   title: Text(
                     'Address: $address',

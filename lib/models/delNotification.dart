@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../constants.dart';
+
 class DelNotification extends StatefulWidget {
   String id;
   DelNotification(this.id);
@@ -43,7 +45,7 @@ class DelNotificationState extends State<DelNotification>
               height: 180.0,
               decoration: ShapeDecoration(
                 //color: Color.fromRGBO(41, 167, 77, 10),
-                  color: Colors.deepPurple,
+                  color: kThemeColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0))),
               child: Column(

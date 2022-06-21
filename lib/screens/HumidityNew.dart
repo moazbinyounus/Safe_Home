@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:safe_home/constants.dart';
 import 'package:safe_home/models/DialogWidget.dart';
 import 'package:safe_home/models/humidityModel.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -43,7 +44,7 @@ class _HmdHomePageState extends State<HmdHomePage> {
       appBar: AppBar(title: Text(widget.roomName,
 
       style:  TextStyle(
-          color: Colors.deepPurple
+          color: kThemeColor
       ),),
       centerTitle: true,
       backgroundColor: Colors.white,
@@ -58,9 +59,13 @@ class _HmdHomePageState extends State<HmdHomePage> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
+      // stream: _firestore
+      //     .collection("finalhmd")
+      //     .orderBy("time", descending: false).where('pdate', isEqualTo: currentDate).where('id', isEqualTo: widget.id)
+      //     .snapshots(),
       stream: _firestore
           .collection("finalhmd")
-          .orderBy("time", descending: false).where('pdate', isEqualTo: currentDate).where('id', isEqualTo: widget.id)
+          .orderBy("time", descending: false).where('pdate', isEqualTo: '2021-12-12').where('id', isEqualTo: widget.id)
           .snapshots(),
       //stream: _firestore.collection('finalhmd').snapshots(),
       builder: (context, snapshot) {

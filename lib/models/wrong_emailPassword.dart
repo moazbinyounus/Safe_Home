@@ -1,5 +1,6 @@
 //this dialog is used for displaying feedback when credentials entered have no account registered
 import 'package:flutter/material.dart';
+import 'package:safe_home/constants.dart';
 
 class EmailPassword extends StatefulWidget {
   @override
@@ -43,7 +44,7 @@ class EmailPasswordState extends State<EmailPassword>
 
               decoration: ShapeDecoration(
                 //color: Color.fromRGBO(41, 167, 77, 10),
-                  color: Colors.deepPurple,
+                  color: kThemeColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0))),
               child: Column(

@@ -1,4 +1,3 @@
-
 //import 'dart:html';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart'
     show Firestore, QuerySnapshot;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_home/constants.dart';
 import 'package:safe_home/screens/FaceRecogList.dart';
 import 'package:safe_home/screens/TempNEW.dart';
 import 'package:safe_home/screens/face_recog_history.dart';
@@ -30,17 +30,16 @@ import 'package:cloud_firestore/cloud_firestore.dart'
 import 'package:firebase_auth/firebase_auth.dart';
 
 final _auth = FirebaseAuth.instance;
-String report ='Calculating';
+String report = 'Calculating';
 
 class RoomDetail extends StatefulWidget {
   static String id = 'room_detail';
   //String report ='High Humidity, opening a window might help';
   final String roomId;
   final String roomName;
-   //bool isSwitched;
+  //bool isSwitched;
 
-
-  RoomDetail(this.roomName,this.roomId);
+  RoomDetail(this.roomName, this.roomId);
 
   @override
   _RoomDetailState createState() => _RoomDetailState();
@@ -48,405 +47,389 @@ class RoomDetail extends StatefulWidget {
 
 class _RoomDetailState extends State<RoomDetail> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool isSwitched=false;
-  bool smokeSwitch= false;
+  bool isSwitched = false;
+  bool smokeSwitch = false;
   // todo: Make switch function and
 
-
-
   @override
-  void initState(){
+  void initState() {
     //report='calculating';
     print('initworking');
     super.initState();
     getSwitch(widget.roomId);
     getSmokeSwitch(widget.roomId);
-
-
   }
-
 
   getSwitch(String device_id) async {
-    DocumentReference documentReference = FirebaseFirestore.instance.collection('Switch').doc(device_id);
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection('Switch').doc(device_id);
     bool state;
     await documentReference.get().then((snapshot) {
-      if(snapshot.exists){
-      state = snapshot.get('pir');
-      setState(() {
-        isSwitched = state==true;
+      if (snapshot.exists) {
+        state = snapshot.get('pir');
+        setState(() {
+          isSwitched = state == true;
+        });
+      } else {
+        isSwitched = false;
       }
-      );}
-      else{
-        isSwitched= false;
-      }
-
-    }
-    );
-
+    });
   }
+
   getSmokeSwitch(String device_id) async {
-    DocumentReference documentReference = FirebaseFirestore.instance.collection('smoke_switch').doc(device_id);
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection('smoke_switch').doc(device_id);
     bool state;
     await documentReference.get().then((snapshot) {
-      if(snapshot.exists){
-
-      state = snapshot.get('smoke');
-      setState(() {
-        smokeSwitch = state==true;
-      });}
-      else{
-        smokeSwitch=false;
+      if (snapshot.exists) {
+        state = snapshot.get('smoke');
+        setState(() {
+          smokeSwitch = state == true;
+        });
+      } else {
+        smokeSwitch = false;
       }
-
-    }
-      );
-
+    });
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        //automaticallyImplyLeading: false,
+        appBar: AppBar(
+          centerTitle: true,
+          //automaticallyImplyLeading: false,
 
-        iconTheme: IconThemeData(color: Colors.deepPurple),
-        elevation: 0,
-        backgroundColor: Colors.white38,
-        title: Text(widget.roomName,
-
-        style: TextStyle(
-          color: Colors.deepPurple
-        ),),
-      ),
-      drawer: Column(
-        children: [
-          Expanded(
-            child: Drawer(
-              // Add a ListView to the drawer. This ensures the user can scroll
-              // through the options in the drawer if there isn't enough vertical
-              // space to fit everything.
-              child: ListView(
-                // Important: Remove any padding from the ListView.
-                padding: EdgeInsets.zero,
-                children: <Widget>[
-                  Container(
-                    height: 100,
-                    child: DrawerHeader(
-                      decoration: BoxDecoration(
-                        color: Colors.deepPurple,
+          iconTheme: IconThemeData(color: kThemeColor),
+          elevation: 0,
+          backgroundColor: Colors.white38,
+          title: Text(
+            widget.roomName,
+            style: TextStyle(color: kThemeColor),
+          ),
+        ),
+        drawer: Column(
+          children: [
+            Expanded(
+              child: Drawer(
+                // Add a ListView to the drawer. This ensures the user can scroll
+                // through the options in the drawer if there isn't enough vertical
+                // space to fit everything.
+                child: ListView(
+                  // Important: Remove any padding from the ListView.
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    Container(
+                      height: 100,
+                      child: DrawerHeader(
+                        decoration: BoxDecoration(
+                          color: kThemeColor,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Safe Home',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
                       ),
-                      child: Center(
-                        child: Text('Safe Home',
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.contact_phone,
+                        color: kThemeColor,
+                      ),
+                      title: Text(
+                        'Emergency Contacts',
+                        style: TextStyle(color: Colors.black87),
+                      ),
+                      onTap: () {
+                        // Update the state of the app.
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) =>
+                                EmergencyContacts(widget.roomId)));
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.person_remove_alt_1_rounded,
+                          color: kThemeColor),
+                      title: Text(
+                        'Activate Motion Detection',
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),),
+                            color: Colors.black87,
+                            fontWeight: FontWeight.normal),
+                      ),
+                      trailing: Switch(
+                        value: isSwitched,
+                        onChanged: (value) {
+                          setState(() {
+                            isSwitched = value;
+                            print(isSwitched);
+                            print(value);
+                            FirebaseFirestore.instance
+                                .collection("Switch")
+                                .doc(widget.roomId)
+                                .set({
+                              "dev_id": widget.roomId,
+                              "pir": value,
+                            }).then((value) {
+                              return "success updated";
+                            }).catchError((onError) {
+                              print('contact added');
+                              return "error";
+                            });
+                          });
+                        },
+                        activeTrackColor: Colors.lightGreenAccent,
+                        activeColor: Colors.green,
+                      ),
+                      onTap: () {
+                        // Update the state of the app.
+                        //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>PirSwitch(widget.roomId)));
+
+                        // ...
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.local_fire_department,
+                        color: kThemeColor,
+                      ),
+                      title: Text('Smoke Switch'),
+                      trailing: Switch(
+                        value: smokeSwitch,
+                        onChanged: (value) {
+                          setState(() {
+                            smokeSwitch = value;
+                            print(smokeSwitch);
+                            print(value);
+                            FirebaseFirestore.instance
+                                .collection("smoke_switch")
+                                .doc(widget.roomId)
+                                .set({
+                              "dev_id": widget.roomId,
+                              "smoke": value,
+                            }).then((value) {
+                              return "success updated";
+                            }).catchError((onError) {
+                              print('switch updated');
+                              return "error";
+                            });
+                          });
+                        },
+                        activeTrackColor: Colors.lightGreenAccent,
+                        activeColor: Colors.green,
                       ),
                     ),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.contact_phone,
-                    color: Colors.deepPurple,
-                    ),
-
-                    title: Text('Emergency Contacts',
-
-                    style: TextStyle(
-                      color: Colors.black87
-                    ),),
-                    onTap: () {
-                      // Update the state of the app.
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>EmergencyContacts(widget.roomId)));
-
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.person_remove_alt_1_rounded,
-                    color: Colors.deepPurple),
-                    title: Text('Activate Motion Detection',
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.normal
-                    ),),
-                    trailing: Switch(
-
-
-                      value: isSwitched,
-
-                      onChanged: (value) {
-
-                        setState(() {
-                          isSwitched = value;
-                          print(isSwitched);
-                          print(value);
-                          FirebaseFirestore.instance
-                              .collection("Switch")
-                              .doc(widget.roomId)
-                              .set({
-                            "dev_id": widget.roomId,
-                            "pir" : value,
-
-                          }).then((value) {
-                            return "success updated";
-                          }).catchError((onError) {
-
-                            print('contact added');
-                            return "error";
-                          });
-                        });
-
+                    ListTile(
+                      leading: Icon(
+                        Icons.keyboard_voice,
+                        color: kThemeColor,
+                      ),
+                      title: Text('Voice training'),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => VoiceTraining(widget.roomId)));
                       },
-                      activeTrackColor: Colors.lightGreenAccent,
-                      activeColor: Colors.green,
-                      
-
-
                     ),
-                    onTap: () {
-                      // Update the state of the app.
-                      //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>PirSwitch(widget.roomId)));
+                    // ListTile(
+                    //   leading: Icon(Icons.list,
+                    //     color: Colors.deepPurple,),
+                    //   title: Text('Recognized Faces'),
+                    //   onTap: (){
+                    //     Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>MainPage(widget.roomId)));
+                    //   },
+                    // ),
 
-
-                      // ...
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.local_fire_department,
-                      color: Colors.deepPurple,
-                    ),
-                    title: Text('Smoke Switch'),
-                    trailing: Switch(
-                      value: smokeSwitch,
-                      onChanged: (value) {
-                        setState(() {
-                          smokeSwitch = value;
-                          print(smokeSwitch);
-                          print(value);
-                          FirebaseFirestore.instance
-                              .collection("smoke_switch")
-                              .doc(widget.roomId)
-                              .set({
-                            "dev_id": widget.roomId,
-                            "smoke" : value,
-
-                          }).then((value) {
-                            return "success updated";
-                          }).catchError((onError) {
-
-                            print('switch updated');
-                            return "error";
-                          });
-                        });
-
+                    ListTile(
+                      leading: Icon(
+                        Icons.face,
+                        color: kThemeColor,
+                      ),
+                      title: Text('Face Recognition'),
+                      onTap: () {
+                        //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Home(widget.roomId)));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => FaceRecog(widget.roomId)));
                       },
-                      activeTrackColor: Colors.lightGreenAccent,
-                      activeColor: Colors.green,
-
-
                     ),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.keyboard_voice,
-                    color: Colors.deepPurple,),
-                    title: Text('Voice training'),
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>VoiceTraining(widget.roomId)));
-                    },
-                  ),
-                  // ListTile(
-                  //   leading: Icon(Icons.list,
-                  //     color: Colors.deepPurple,),
-                  //   title: Text('Recognized Faces'),
-                  //   onTap: (){
-                  //     Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>MainPage(widget.roomId)));
-                  //   },
-                  // ),
 
-
-                  ListTile(
-                    leading: Icon(Icons.face,
-                      color: Colors.deepPurple,),
-                    title: Text('Face Recognition'),
-                    onTap: (){
-                      //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Home(widget.roomId)));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>FaceRecog(widget.roomId)));
-                    },
-                  ),
-
-                  ListTile(
-                    leading: Icon(Icons.notification_important_sharp,
-                    color:Colors.deepPurple),
-                    title: Text('Notifications'),
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Notifications(widget.roomId)));
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.logout,
-                    color: Colors.deepPurple,
+                    ListTile(
+                      leading: Icon(Icons.notification_important_sharp,
+                          color: kThemeColor),
+                      title: Text('Notifications'),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => Notifications(widget.roomId)));
+                      },
                     ),
-                    title: Text('Sign out'),
-                    onTap: () {
-                      // Update the state of the app.
-                      // ...
-                      _auth.signOut();
-                      //Navigator.of(context)push();
-                      //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>WelcomeScreen.id));
-                      Navigator.pushNamed(context, WelcomeScreen.id);
+                    ListTile(
+                      leading: Icon(
+                        Icons.logout,
+                        color: kThemeColor,
+                      ),
+                      title: Text('Sign out'),
+                      onTap: () {
+                        // Update the state of the app.
+                        // ...
+                        _auth.signOut();
+                        //Navigator.of(context)push();
+                        //Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>WelcomeScreen.id));
+                        Navigator.pushNamed(context, WelcomeScreen.id);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+        body: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 45.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Text(
+                      report,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        //fontWeight: FontWeight.bold,
 
-                    },
+                        fontSize: 17,
+                        //fontFamily: 'NunitoSans',
+                        color: Colors.black87,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-          )
-        ],
-      ),
-        body: Column(
 
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 45.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(child: Text(report,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  //fontWeight: FontWeight.bold,
+            StreamBuilder<QuerySnapshot>(
+                stream: _firestore
+                    .collection('test1')
+                    .orderBy('time', descending: true)
+                    .limit(1)
+                    .snapshots(),
+                // todo: check for other rooms
 
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
 
-                  fontSize: 17,
-                  //fontFamily: 'NunitoSans',
-                  color: Colors.black87,
+                  final messages = snapshot.data.docs;
 
+                  //List<Text> sensordata = [];
 
+                  for (var message in messages) {
+                    final humidity1 = message.get('humidity');
+                    final id1 = message.get('id');
+                    final temp1 = message.get('temp');
 
+                    SensorData s1 = SensorData("Humidity", humidity1);
+                    // SensorData s2 = SensorData("id", id1);
+                    SensorData s3 = SensorData("Temperature", temp1);
 
+                    dataa.clear();
+                    dataa2.clear();
+                    print(widget.roomId);
+                    //report='no data';
+
+                    if (id1.toString() == widget.roomId) {
+                      print(widget.roomId);
+                      print(id1.toString());
+                      print('in loop');
+
+                      if (temp1 < 40 && humidity1 < 70) {
+                        report =
+                            'Temperature and Humidity are at Optimum Levels';
+                      } else if (temp1 > 40) {
+                        report = 'Temprature is High';
+                      } else if (humidity1 > 70) {
+                        report = 'Humidity High Chance of Fungus';
+                      }
+                      dataa.add(s1);
+                      dataa.add(s3);
+                    }
+                    if (id1.toString() != widget.roomId) {
+                      report = 'No data for this device';
+                      print(report);
+                    }
+
+                    print(humidity1);
+                  }
+                  return Expanded(
+                    child: SfCircularChart(
+                      //palette: [Colors.green,Colors.red],
+
+                      legend: Legend(
+                          overflowMode: LegendItemOverflowMode.wrap,
+                          isVisible: true,
+                          position: LegendPosition.bottom),
+                      series: <RadialBarSeries>[
+                        RadialBarSeries<SensorData, String>(
+                            dataSource: getSensorData(),
+                            xValueMapper: (SensorData sd, _) => sd.sensorName,
+                            yValueMapper: (SensorData sd, _) => sd.value,
+                            dataLabelSettings:
+                                DataLabelSettings(isVisible: true)),
+                      ],
+                    ),
+                  );
+                }),
+            //SummaryGenerator(widget.roomId),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 25.0, left: 10),
+                    child: OutlinedButton(
+                        child: Text(
+                          "Temperature",
+                          style: TextStyle(color: kThemeColor),
+                        ),
+                        onPressed: () {
+                          //Navigator.pushNamed(context, roomId);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => TempHomePage(
+                                  widget.roomId, widget.roomName)));
+                        }),
+                  ),
+                  //flex: 1,
                 ),
-              ),
-
-
-              ),
-            ],
-          ),
-        ),
-
-
-        StreamBuilder<QuerySnapshot> (
-            stream: _firestore.collection('test1').orderBy('time', descending: true).limit(1).snapshots(),
-            // todo: check for other rooms
-
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-
-
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              final messages = snapshot.data.docs;
-
-              //List<Text> sensordata = [];
-
-              for (var message in messages) {
-                final humidity1 = message.get('humidity');
-                final id1= message.get('id');
-                final temp1 = message.get('temp');
-
-                SensorData s1 = SensorData("Humidity", humidity1);
-                // SensorData s2 = SensorData("id", id1);
-                SensorData s3 = SensorData("Temperature", temp1);
-
-                dataa.clear();
-                dataa2.clear();
-                print(widget.roomId);
-                //report='no data';
-
-
-                if(id1.toString() == widget.roomId){
-                  print(widget.roomId);
-                  print(id1.toString());
-                  print('in loop');
-
-
-                  if( temp1 < 40 && humidity1 < 70){
-                    report= 'Temperature and Humidity are at Optimum Levels';
-                  }
-                  else if (temp1 > 40){
-                    report = 'Temprature is High';
-                  }
-                  else if (humidity1 > 70){
-                    report = 'Humidity High Chance of Fungus';
-                  }
-                dataa.add(s1);
-                dataa.add(s3);
-                }
-                if(id1.toString() != widget.roomId){
-                  report='No data for this device';
-                  print (report);
-                }
-
-                print(humidity1);
-
-              }
-              return Expanded(
-                child: SfCircularChart(
-
-
-                  //palette: [Colors.green,Colors.red],
-
-
-                  legend: Legend(
-                      overflowMode: LegendItemOverflowMode.wrap,
-                      isVisible: true,
-                      position: LegendPosition.bottom),
-                  series: <RadialBarSeries>[
-                    RadialBarSeries<SensorData, String>(
-                        dataSource: getSensorData(),
-
-                        xValueMapper: (SensorData sd, _) => sd.sensorName,
-                        yValueMapper: (SensorData sd, _) => sd.value,
-                        dataLabelSettings: DataLabelSettings(isVisible: true)),
-                  ],
+                SizedBox(
+                  width: 10,
                 ),
-              );
-            }),
-        //SummaryGenerator(widget.roomId),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 25.0 , left: 10),
-                child: OutlinedButton(
-                    child: Text("Temperature"),
-                    onPressed: () {
-                      //Navigator.pushNamed(context, roomId);
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>TempHomePage(widget.roomId,widget.roomName)));
-
-                    }),
-              ),
-              //flex: 1,
-            ),
-            SizedBox(width: 10,),
-            Expanded(
-              child: Padding(
-
-                padding: const EdgeInsets.only(bottom:25,right: 10),
-                child: OutlinedButton(
-                    child: Text("Humidity"),
-                    onPressed: () {
-                      //Navigator.pushNamed(context, Humidity.id);
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>HmdHomePage(widget.roomId,widget.roomName)));
-                    }),
-              ),
-              //flex: 1,
-            ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 25, right: 10),
+                    child: OutlinedButton(
+                        child: Text(
+                          "Humidity",
+                          style: TextStyle(
+                            color: kThemeColor
+                          ),
+                        ),
+                        onPressed: () {
+                          //Navigator.pushNamed(context, Humidity.id);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) =>
+                                  HmdHomePage(widget.roomId, widget.roomName)));
+                        }),
+                  ),
+                  //flex: 1,
+                ),
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,
+            )
           ],
-          mainAxisAlignment: MainAxisAlignment.center,
-        )
-      ],
-    ));
+        ));
   }
 }
 

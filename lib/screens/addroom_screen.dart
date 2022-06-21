@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:safe_home/constants.dart';
 import '../models/DialogWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -23,7 +24,7 @@ class AddRoom extends StatelessWidget {
         elevation: 0,
         title: Text('Add Room',
         style: TextStyle(
-          color: Colors.deepPurple
+          color: kThemeColor
 
         ),
         ),
@@ -52,12 +53,12 @@ class AddRoom extends StatelessWidget {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Colors.deepPurple, width: 1.0),
+                        BorderSide(color: kThemeColor, width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Colors.deepPurple, width: 2.0),
+                        BorderSide(color: kThemeColor, width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                 ),
@@ -81,12 +82,12 @@ class AddRoom extends StatelessWidget {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Colors.deepPurple, width: 1.0),
+                        BorderSide(color: kThemeColor, width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Colors.deepPurple, width: 2.0),
+                        BorderSide(color: kThemeColor, width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                 ),
@@ -97,7 +98,7 @@ class AddRoom extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Material(
-                  color: Colors.deepPurple,
+                  color: kThemeColor,
                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
                   elevation: 5.0,
                   child: MaterialButton(

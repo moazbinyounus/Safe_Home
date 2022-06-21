@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safe_home/constants.dart';
 import 'package:safe_home/screens/room_detail.dart';
 import '../models/dialod_del.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,7 +44,7 @@ class RoomTile extends StatelessWidget {
           },
 
           child: Container(
-            color: Colors.deepPurple,
+            color: kThemeColor,
             child: Center(
               child: Text(
                 '$roomName',

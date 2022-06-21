@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/room_tile.dart';
 import 'addroom_screen.dart';
 import 'package:safe_home/services/getToken.dart';
+import '../constants.dart';
 
 User currentUser;
 bool isSwitched;
@@ -66,7 +67,7 @@ class _RoomScreenState extends State<RoomScreen> {
 
         title: Text(
           'Rooms',
-          style: TextStyle(color: Colors.deepPurple,
+          style: TextStyle(color: kThemeColor,
           //fontSize: 25,
           ),
         ),
@@ -74,7 +75,7 @@ class _RoomScreenState extends State<RoomScreen> {
       bottomNavigationBar: TextButton(
         child: Icon(
           Icons.add_circle_outline,
-          color: Colors.deepPurple,
+          color: kThemeColor,
           size: 30,
         ),
         onPressed: () {

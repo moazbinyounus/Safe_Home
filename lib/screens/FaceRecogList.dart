@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_home/constants.dart';
 import '../models/faceTIle.dart';
 import 'face_recognition.dart';
 FirebaseFirestore _firestore= FirebaseFirestore.instance;
@@ -17,7 +18,7 @@ class FaceRecog extends StatelessWidget {
           Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Home(id)));
 
         },
-        child: Icon(Icons.add_circle_outline,color: Colors.deepPurple,size: 30,),
+        child: Icon(Icons.add_circle_outline,color: kThemeColor,size: 30,),
       ),
       appBar: AppBar(
         elevation: 0,
@@ -27,7 +28,7 @@ class FaceRecog extends StatelessWidget {
         title: Text(
           'Face Recognition',
           style: TextStyle(
-              color: Colors.deepPurple
+              color: kThemeColor
           ),
         ),
       ),
@@ -52,7 +53,7 @@ class FaceStream extends StatelessWidget {
           if (!snapshot.hasData){
             return Center(
               child: LinearProgressIndicator(
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: kThemeColor,
               ),
             );
           }

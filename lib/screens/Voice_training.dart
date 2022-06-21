@@ -4,6 +4,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:highlight_text/highlight_text.dart';
+import 'package:safe_home/constants.dart';
 import 'package:safe_home/screens/rooms_screen.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -23,7 +24,7 @@ class _VoiceTrainingState extends State<VoiceTraining> {
   bool _isListening = false;
   String _text = 'Press the button and start speaking ';
   double confidence = 1.0;
-  String word='No word Saved';
+  String word = 'No word Saved';
   String id;
   @override
   void initState() {
@@ -43,23 +44,23 @@ class _VoiceTrainingState extends State<VoiceTraining> {
           centerTitle: true,
           backgroundColor: Colors.white38,
           elevation: 0,
-          title: Text('Voice Training',
-          style: TextStyle(
-            color: Colors.deepPurple
-          ),
+          title: Text(
+            'Voice Training',
+            style: TextStyle(color: kThemeColor),
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: AvatarGlow(
           animate: _isListening,
-          glowColor: Theme.of(context).primaryColor,
+          glowColor: kThemeColor,
           endRadius: 75.0,
           duration: const Duration(milliseconds: 2000),
           repeatPauseDuration: const Duration(milliseconds: 100),
           repeat: true,
           child: FloatingActionButton(
+            backgroundColor: kThemeColor,
             onPressed: _listen,
-            child: Icon(_isListening ? Icons.mic : Icons.mic_none),
+            child: Icon(_isListening ? Icons.mic : Icons.mic_none, ),
           ),
         ),
         body: Column(children: [
@@ -75,16 +76,13 @@ class _VoiceTrainingState extends State<VoiceTraining> {
                 final messages = snapshot.data.docs;
 
                 for (var message in messages) {
-                  var rooid=message.get('id');
-                  if(rooid ==widget.RoomID){
-
-                  word = message.get('words');
-                  if(word==''){
-                    word='No Word Saved';
+                  var rooid = message.get('id');
+                  if (rooid == widget.RoomID) {
+                    word = message.get('words');
+                    if (word == '') {
+                      word = 'No Word Saved';
+                    }
                   }
-
-                  }
-
                 }
 
                 return Padding(
@@ -115,7 +113,13 @@ class _VoiceTrainingState extends State<VoiceTraining> {
               ],
             ),
           ),
-          TextButton(onPressed: updateWords, child: Text('Done'))
+          TextButton(
+            onPressed: updateWords,
+            child: Text(
+              'Done',
+              style: TextStyle(color: kThemeColor),
+            ),
+          )
         ]));
   }
 
@@ -145,15 +149,13 @@ class _VoiceTrainingState extends State<VoiceTraining> {
   String _getTrainedwords() {
     _fs.collection('VoiceTraining').get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
-        var rid=doc['id'];
-        if(rid == widget.RoomID){
-        print(doc["words"]);
-        word = doc["words"];}
-        else{
-          word='';
+        var rid = doc['id'];
+        if (rid == widget.RoomID) {
+          print(doc["words"]);
+          word = doc["words"];
+        } else {
+          word = '';
         }
-
-
       });
     });
 
@@ -166,12 +168,11 @@ class _VoiceTrainingState extends State<VoiceTraining> {
   }
 
   void updateWords() {
-
-    if(_text!='Press the button and start speaking '){
-    _fs.collection('VoiceTraining').doc(widget.RoomID).set({
-      'id': widget.RoomID,
-      'words': _text,
-    });}
+    if (_text != 'Press the button and start speaking ') {
+      _fs.collection('VoiceTraining').doc(widget.RoomID).set({
+        'id': widget.RoomID,
+        'words': _text,
+      });
+    }
   }
 }
-

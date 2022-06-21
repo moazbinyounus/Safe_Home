@@ -2,6 +2,8 @@ import 'package:safe_home/api/firebase_api.dart';
 import 'package:safe_home/models/firebase_file.dart';
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+
 class ImagePage extends StatelessWidget {
   final FirebaseFile file;
 
@@ -19,7 +21,7 @@ class ImagePage extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            color: Colors.deepPurple,
+            color: kThemeColor,
             icon: Icon(Icons.file_download),
             onPressed: () async {
               await FirebaseApi.downloadFile(file.ref);

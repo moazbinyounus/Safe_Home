@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safe_home/constants.dart';
 
 
 class ContactAddedDialog extends StatefulWidget {
@@ -43,7 +44,7 @@ class ContactAddedDialogState extends State<ContactAddedDialog>
               height: 180.0,
               decoration: ShapeDecoration(
                 //color: Color.fromRGBO(41, 167, 77, 10),
-                  color: Colors.deepPurple,
+                  color: kThemeColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0))),
               child: Column(

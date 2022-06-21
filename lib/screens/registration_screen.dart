@@ -1,6 +1,7 @@
 //this file consists of the registration functionality using firebase as the backend database which is a non sql database.
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:safe_home/constants.dart';
 import 'package:safe_home/screens/rooms_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -30,7 +31,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Form(
-            autovalidate: true,
+            //autovalidate: true,
             key: formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -65,11 +66,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.deepPurple, width: 1.0),
+                      borderSide: BorderSide(color: kThemeColor, width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.deepPurple, width: 2.0),
+                      borderSide: BorderSide(color: kThemeColor, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -98,11 +99,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.deepPurple, width: 1.0),
+                      borderSide: BorderSide(color: kThemeColor, width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.deepPurple, width: 2.0),
+                      borderSide: BorderSide(color: kThemeColor, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
@@ -113,7 +114,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0),
                   child: Material(
-                    color: Colors.deepPurple,
+                    color: kThemeColor,
                     borderRadius: BorderRadius.all(Radius.circular(30.0)),
                     elevation: 5.0,
                     child: MaterialButton(

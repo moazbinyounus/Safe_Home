@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:safe_home/constants.dart';
 import 'package:safe_home/models/DialogWidget.dart';
 import 'package:safe_home/models/tempModel.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -43,7 +44,7 @@ class _TempHomePageState extends State<TempHomePage> {
       appBar: AppBar(title: Text(widget.roomName,
 
       style: TextStyle(
-          color: Colors.deepPurple
+          color: kThemeColor
       ),),
       automaticallyImplyLeading: false,
       centerTitle: true,
@@ -60,7 +61,8 @@ class _TempHomePageState extends State<TempHomePage> {
       //   collection("finaltemp")
       //   .orderBy("time", descending: false)
       //   .snapshots(),
-      stream: _firestore.collection('finaltemp').orderBy('time',descending: false).where('id', isEqualTo: widget.id).where('pdate',isEqualTo: currentDate).snapshots(),
+      // stream: _firestore.collection('finaltemp').orderBy('time',descending: false).where('id', isEqualTo: widget.id).where('pdate',isEqualTo: currentDate).snapshots(),
+      stream: _firestore.collection('finaltemp').orderBy('time',descending: false).where('id', isEqualTo: widget.id).where('pdate',isEqualTo: '2021-12-12').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();

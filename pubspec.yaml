@@ -41,6 +41,7 @@ dependencies:
  # cloud_firestore: ^0.12.5
  # firebase_messaging: ^5.0.2
   firebase_core: ^1.2.1
+  platform: ^3.1.0
   firebase_auth: ^1.3.0
   cloud_firestore: ^2.2.1
   form_field_validator: ^1.1.0
@@ -53,20 +54,11 @@ dependencies:
   avatar_glow: ^1.2.0
   highlight_text: ^0.7.2
   contact_picker: ^0.0.2
-  charts_flutter: ^0.11.0
   image_picker: ^0.7.5+3
   firebase_storage: ^10.2.0
   permission_handler: ^8.0.0+2
   chewie:
-
-
-
-
-
-
-
-
-
+  charts_flutter: ^0.12.0
 dev_dependencies:
 
   flutter_test:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safe_home/constants.dart';
 
 class DialogWidget extends StatefulWidget {
   final String string;
@@ -45,7 +46,7 @@ class DialogWidgetState extends State<DialogWidget>
 
               decoration: ShapeDecoration(
                 //color: Color.fromRGBO(41, 167, 77, 10),
-                  color: Colors.deepPurple,
+                  color: kThemeColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0))),
               child: Column(
